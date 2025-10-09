@@ -1,14 +1,73 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>bauzagpt</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BauzaGPT — Búsqueda OSINT</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <!-- Si tienes logo.svg en /assets, descomenta la img -->
+      <!-- <img src="assets/logo.svg" alt="BauzaGPT" class="logo"> -->
+      <span class="logo-text">Bauza<span>GPT</span></span>
+    </div>
+    <nav class="nav">
+      <a href="#planes">Planes</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <div class="hero-inner">
+      <h1>NO BUSQUES LO QUE NO QUIERES ENCONTRAR</h1>
+      <p class="subtitle">OSINT rápido, claro y accionable.</p>
+
+      <form id="searchForm" class="search">
+        <label for="q">Target de Búsqueda</label>
+        <div class="input-row">
+          <input id="q" name="q" type="text" placeholder="ejemplo.com, nombre, email, @usuario..." required>
+          <button type="submit" class="btn primary">Búsqueda Sencilla</button>
+        </div>
+      </form>
+
+      <div class="cta-row">
+        <a class="btn pro" href="pago.html">💳 Búsqueda Premium (20 MXN)</a>
+      </div>
+
+      <p class="note">La Búsqueda Premium genera un informe en PDF con resultados verificados.</p>
+    </div>
+  </main>
+
+  <section id="planes" class="plans">
+    <h2>Planes</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>Básico</h3>
+        <p>Vista rápida de hallazgos públicos.</p>
+        <strong>$10 MXN</strong>
+      </article>
+      <article class="card featured">
+        <h3>Premium</h3>
+        <p>PDF + enlaces verificados (HTTP&lt;400), ZIP descargable.</p>
+        <strong>$20 MXN</strong>
+      </article>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <h2>Preguntas frecuentes</h2>
+    <details><summary>¿Qué incluye el PDF?</summary><p>Resumen OSINT y enlaces verificados listos para accionar.</p></details>
+    <details><summary>¿Cuánto tarda?</summary><p>Depende del objetivo; se procesa automáticamente tras validar el pago.</p></details>
+  </section>
+
+  <footer class="footer">
+    <small>© 2025 BAUZA GPT — OSINT</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
 </html>
+
  
