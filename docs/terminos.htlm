@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <title>Términos — BAUZA GPT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="./">BAUZA <span>GPT</span></a>
+      <nav class="nav">
+        <a class="btn ghost" href="./privacidad.html">Privacidad</a>
+        <a class="btn ghost" href="./login.html">Entrar</a>
+        <a class="btn primary" href="./signup.html">Registrarme</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding:40px 0;">
+    <h1>Términos del Servicio</h1>
+    <p class="sub">Uso responsable, OSINT legal y entregas por descarga segura.</p>
+
+    <div class="card" style="max-width:900px;">
+      <h3>1) Servicio</h3>
+      <p>Realizamos búsquedas OSINT éticas, usando fuentes públicas o autorizadas por el cliente. Entregamos un PDF (y ZIP en plan Pro) con enlaces verificados (HTTP &lt; 400) y evidencias cuando aplique.</p>
+
+      <h3>2) Alcance y prohibiciones</h3>
+      <ul>
+        <li>No realizamos hacking ilegal, intrusiones ni acceso no autorizado.</li>
+        <li>No nos responsabilizamos por uso indebido de la información por parte del cliente.</li>
+        <li>El cliente declara tener derecho/legítimo interés para solicitar la búsqueda.</li>
+      </ul>
+
+      <h3>3) Pagos y validación</h3>
+      <p>Los pagos se realizan por BBVA Spin/Oxxo a cuenta, Nu, Bitso o PayPal (@ivanbauza). La validación es manual por panel administrativo. Tras validación, se habilita la descarga segura en la cuenta del cliente.</p>
+
+      <h3>4) Entrega</h3>
+      <p>La entrega es mediante descarga con token desde tu cuenta en bauzagpt.com (correo opcional). No usamos WhatsApp.</p>
+
+      <h3>5) Reembolsos</h3>
+      <p>Si no podemos completar la búsqueda por causas imputables a nosotros, podremos ofrecer reembolso o rehacer la búsqueda. No hay reembolsos por datos inexistentes en fuentes públicas.</p>
+
+      <h3>6) Limitación de responsabilidad</h3>
+      <p>El servicio se provee “tal cual”. No garantizamos resultados específicos; dependemos de información pública disponible al momento.</p>
+
+      <h3>7) Cambios</h3>
+      <p>Podemos actualizar estos términos. Te notificaremos cambios relevantes en el sitio.</p>
+    </div>
+  </main>
+</body>
+</html>
