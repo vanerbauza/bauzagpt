@@ -1,0 +1,50 @@
+:root{
+  --bg:#0b0b10;
+  --text:#eaeaf3;
+  --muted:#b0b2c0;
+  --primary:##13ff6e;     /* Morado principal */
+  --primary-soft:#76ffb2;/* Morado suave */
+  --card:#14141c;
+  --accent:#c7b8ff;
+  --border:#2a2a37;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Ubuntu,Arial}
+a{color:var(--primary);text-decoration:none}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+.topbar{border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,11,16,.85);backdrop-filter:saturate(140%) blur(10px);z-index:10}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{font-weight:800;letter-spacing:.5px}
+.brand span{color:var(--primary)}
+.nav a{margin-left:14px}
+.btn{display:inline-block;padding:10px 16px;border-radius:8px;font-weight:600;border:1px solid var(--border)}
+.btn.primary{background:var(--primary);color:#fff;border-color:transparent}
+.btn.ghost{background:transparent;color:var(--text)}
+.hero{padding:64px 0 32px;background:radial-gradient(900px 400px at 50% -100px, rgba(122,60,255,0.25), transparent)}
+.hero h1{font-size:40px;line-height:1.1;margin:0 0 10px}
+.hero .accent{color:var(--primary-soft)}
+.sub{color:var(--muted);margin:0 0 22px}
+.buscador{display:flex;gap:10px;background:#0f0f18;border:2px solid var(--primary);padding:12px;border-radius:14px;box-shadow:0 0 0 4px rgba(122,60,255,0.12)}
+.buscador input,.buscador select{flex:1;min-width:0;background:#121222;border:1px solid var(--border);color:var(--text);padding:12px;border-radius:10px}
+.buscador button{white-space:nowrap}
+.mini{color:var(--muted);font-size:14px;margin-top:12px}
+.grid3{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.card,.price-card{background:var(--card);border:1px solid var(--border);padding:18px;border-radius:14px}
+.pricing{padding:40px 0}
+.price-card .price{font-size:34px;font-weight:800;margin:8px 0}
+.price-card ul{padding-left:18px;color:var(--muted)}
+.price-card.highlight{outline:2px solid var(--primary)}
+.benefits{padding:32px 0}
+.faq{padding:40px 0}
+.faq details{background:var(--card);padding:14px 16px;border:1px solid var(--border);border-radius:12px;margin:10px 0}
+.footer{border-top:1px solid var(--border);padding:24px 0;margin-top:40px}
+.footer-flex{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:860px){
+  .grid3{grid-template-columns:1fr}
+  .grid2{grid-template-columns:1fr}
+  .hero h1{font-size:30px}
+  .buscador{flex-direction:column}
+}
