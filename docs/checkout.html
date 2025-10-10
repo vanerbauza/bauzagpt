@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <title>Checkout — BAUZA GPT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./estilos.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="./">BAUZA <span>GPT</span></a>
+      <nav class="nav">
+        <a class="btn ghost" href="./login.html">Entrar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding:40px 0;">
+    <h1>Checkout</h1>
+    <div id="orderBox" class="card" style="margin-bottom:16px;"></div>
+
+    <div class="card">
+      <h3>Métodos de pago</h3>
+      <ul>
+        <li>BBVA Spin (OXXO a cuenta)</li>
+        <li>Nu México (CLABE)</li>
+        <li>Bitso</li>
+        <li>PayPal (<strong>@ivanbauza</strong>)</li>
+      </ul>
+      <p class="mini">Tras pagar, sube tu comprobante para validación manual. Recibirás acceso a la descarga segura.</p>
+
+      <form id="proofForm" style="margin-top:12px;">
+        <label>Subir comprobante (PDF/JPG/PNG)
+          <input id="proof" type="file" accept=".pdf,.jpg,.jpeg,.png" required>
+        </label>
+        <br><br>
+        <button class="btn primary" type="submit">Enviar comprobante</button>
+      </form>
+      <p id="status" class="mini"></p>
+    </div>
+  </main>
+
+  <script>
+  const API_BASE = "https://TU-BACKEND.render.com";
+  const params = new URLSearchParams(location.search);
+  const orderId = params.get('order') || 'demo';
+  const plan = params.get('plan') || 'basic';
+
+  const box = document.getElementById('orderBox');
+  box.innerHTML = `
+    <p><strong>Orden:</strong> ${orderId}</p>
+    <p><strong>Plan:</strong> ${plan.toUpperCase()}</p>
+    <p class="mini">Guarda tu número de orden para referencia.</p>
+  `;
+
+  document.getElementById('proofForm').addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const file = document.getElementById('proof').files[0];
+    if (!file) { alert('Adjunta tu comprobante'); return; }
+    document.getElementById('status').textContent = 'Enviando comprobante...';
+
+    // Cuando el backend esté listo, haz un upload real:
+    // const fd = new FormData();
+    // fd.append('order_id', orderId);
+    // fd.append('file', file);
+    // const res = await fetch(`${API_BASE}/api/orders/proof`, { method:'POST', body: fd });
+    // const data = await res.json();
+    // if (!res.ok) throw new Error(data?.error || 'No se pudo enviar');
+
+    setTimeout(()=>{
+      document.getElementById('status').textContent =
+        'Comprobante recibido (simulado). Te notificaremos cuando esté validado.';
+    }, 800);
+  });
+  </script>
+</body>
+</html>
