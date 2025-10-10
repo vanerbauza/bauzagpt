@@ -1,20 +1,20 @@
 {
-  "name": "bauzagpt",
-  "version": "1.0.0",
-  "homepage": "https://bauzagpt-ai.github.io/bauzagpt.com",
+  "name": "bauzagpt-site",
   "private": true,
+  "version": "1.0.0",
+  "description": "Sitio BauzaGPT con VitePress (carpeta docs/)",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "deploy": "gh-pages -d dist"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "docs:dev": "vitepress dev docs --host --port 5173",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs --host --port 4173",
+    "start": "npm run docs:dev",
+    "build": "npm run docs:build",
+    "preview": "npm run docs:preview"
   },
   "devDependencies": {
-    "vite": "^4.0.0",
-    "gh-pages": "^6.1.0"
+    "vitepress": "^1.2.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
