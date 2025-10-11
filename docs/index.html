@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <title>BAUZA GPT — OSINT legal rápido y verificado</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Búsquedas OSINT legales en minutos. Entregas en PDF y ZIP con enlaces verificados. Plan Básico $10 MXN, Pro $20 MXN.">
+  <meta name="description" content="Búsqueda OSINT legal en minutos. Vista gratis enmascarada y desbloqueo Premium por $20 MXN.">
   <link rel="icon" href="/docs/favicon.ico">
   <link rel="stylesheet" href="./estilos.css">
   <meta property="og:title" content="BAUZA GPT — OSINT legal">
-  <meta property="og:description" content="Resultados OSINT verificados, entrega en PDF/ZIP, sin WhatsApp.">
+  <meta property="og:description" content="Vista gratis enmascarada. Premium con enlaces verificados y capturas nítidas.">
   <meta property="og:type" content="website">
 </head>
 <body>
@@ -19,132 +19,111 @@
         <a href="./docs/servicios.html">Servicios</a>
         <a href="./docs/faq.html">FAQ</a>
         <a class="btn ghost" href="./login.html">Entrar</a>
-        <a class="btn primary" href="./signup.html">Registrarme</a>
+        <a class="btn primary" href="#gratis">Ver gratis</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- === VISTA PREVIA GRATIS ENMASCARADA (TEASER) === -->
-<section id="gratis" class="teaser wrap" style="margin-top:2rem">
-  <h2>Vista previa GRATIS — Pro enmascarado</h2>
-  <p class="mini">Ves TODO el contenido del plan Pro, pero <strong>enmascarado</strong>. Desbloquea por $20 MXN para ver URLs y capturas nítidas.</p>
-
-  <div class="grid2" style="gap:1rem;margin-top:1rem">
-    <div class="card">
-      <h3>Conteos</h3>
-      <ul id="t-counts" class="list"></ul>
-    </div>
-    <div class="card">
-      <h3>Dominios (enmascarados)</h3>
-      <ul id="t-domains" class="list"></ul>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:1rem">
-    <h3>Matriz de hallazgos</h3>
-    <div class="table-wrap" style="overflow:auto">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Fuente</th><th>Dato</th><th>Evidencia</th><th>Conf.</th><th>Enlace</th>
-          </tr>
-        </thead>
-        <tbody id="t-rows"></tbody>
-      </table>
-    </div>
-    <p class="mini">🔒 En modo gratis, las URLs y miniaturas quedan ocultas.</p>
-  </div>
-
-  <div class="card" style="margin-top:1rem">
-    <h3>Emails / usuarios potenciales</h3>
-    <ul id="t-emails" class="list"></ul>
-  </div>
-
-  <div class="grid3" style="gap:0.75rem;margin-top:1rem">
-    <div class="img blurred">BORROSA</div>
-    <div class="img blurred">BORROSA</div>
-    <div class="img blurred">BORROSA</div>
-    <div class="img blurred">BORROSA</div>
-    <div class="img blurred">BORROSA</div>
-    <div class="img blurred">BORROSA</div>
-  </div>
-
-  <div class="cta-row" style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap">
-    <a class="btn primary" href="./checkout.html?plan=pro">Desbloquear Pro ($20 MXN)</a>
-    <a class="btn ghost" href="./checkout.html?plan=basic">Mini ($10 MXN)</a>
-    <a class="btn" href="./faq.html">FAQ</a>
-  </div>
-
-  <p class="mini" style="margin-top:0.5rem">
-    OSINT legal. La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Pro.
-  </p>
-</section>
-<!-- === /TEASER === -->
-
     <!-- HERO -->
     <section class="hero">
       <div class="wrap">
         <h1>OSINT legal. Resultados claros.<br><span class="accent">Entrega en PDF y ZIP</span></h1>
-        <p class="sub">Planes desde <strong>$10 MXN</strong>. Sin WhatsApp. Descarga segura desde tu cuenta y correo opcional.</p>
+        <p class="sub">Prueba <strong>gratis</strong> (enmascarado). Desbloquea <strong>Premium</strong> por <strong>$20 MXN</strong>.</p>
 
-        <!-- BUSCADOR CON MARCO MORADO -->
+        <!-- BUSCADOR -->
         <form id="searchForm" class="buscador">
           <input id="q" type="text" placeholder="Ej.: Nombre completo, número de teléfono, @usuario de red social" required>
-          <select id="plan">
-            <option value="basic">Básico — $10 MXN</option>
-            <option value="pro">Pro — $20 MXN</option>
-          </select>
-          <button class="btn primary" type="submit">Buscar ahora</button>
+          <div class="cta-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+            <a class="btn" href="#gratis" id="btnGratisTop">Ver gratis (enmascarado)</a>
+            <!-- BOTÓN PREMIUM ÚNICO -->
+            <a id="btnPremiumTop" class="btn pro" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
+          </div>
         </form>
 
-        <p class="mini">Tiempo típico: mismo día (depende de carga). Urgencias: indícalo al comprar.</p>
+        <p class="mini">Sin WhatsApp. Descarga segura desde tu cuenta y correo opcional.</p>
       </div>
     </section>
 
-    <!-- BENEFICIOS -->
-    <section class="benefits">
-      <div class="wrap grid3">
+    <!-- === VISTA PREVIA GRATIS ENMASCARADA (TEASER) === -->
+    <section id="gratis" class="teaser wrap" style="margin-top:2rem">
+      <h2>Vista previa GRATIS — Pro enmascarado</h2>
+      <p class="mini">Ves TODO el contenido del plan Pro, pero <strong>enmascarado</strong>. Desbloquea por $20 MXN para ver URLs y capturas nítidas.</p>
+
+      <div class="grid2" style="gap:1rem;margin-top:1rem">
         <div class="card">
-          <h3>Enlaces verificados</h3>
-          <p>Validamos que cada enlace responda &lt; 400 (sin 404). Incluimos capturas cuando aplica.</p>
+          <h3>Conteos</h3>
+          <ul id="t-counts" class="list"></ul>
         </div>
         <div class="card">
-          <h3>PDF + ZIP listos</h3>
-          <p>Tu reporte PDF con índice y evidencias, más un ZIP con archivos originales.</p>
-        </div>
-        <div class="card">
-          <h3>Privado y legal</h3>
-          <p>OSINT ético, sin intrusión. Datos tratados con confidencialidad.</p>
+          <h3>Dominios (enmascarados)</h3>
+          <ul id="t-domains" class="list"></ul>
         </div>
       </div>
-    </section>
 
-    <!-- PLANES -->
+      <div class="card" style="margin-top:1rem">
+        <h3>Matriz de hallazgos</h3>
+        <div class="table-wrap" style="overflow:auto">
+          <table class="table">
+            <thead>
+              <tr><th>Fuente</th><th>Dato</th><th>Evidencia</th><th>Conf.</th><th>Enlace</th></tr>
+            </thead>
+            <tbody id="t-rows"></tbody>
+          </table>
+        </div>
+        <p class="mini">🔒 En modo gratis, las URLs y miniaturas quedan ocultas.</p>
+      </div>
+
+      <div class="card" style="margin-top:1rem">
+        <h3>Emails / usuarios potenciales</h3>
+        <ul id="t-emails" class="list"></ul>
+      </div>
+
+      <div class="grid3" style="gap:0.75rem;margin-top:1rem">
+        <div class="img blurred">BORROSA</div>
+        <div class="img blurred">BORROSA</div>
+        <div class="img blurred">BORROSA</div>
+        <div class="img blurred">BORROSA</div>
+        <div class="img blurred">BORROSA</div>
+        <div class="img blurred">BORROSA</div>
+      </div>
+
+      <div class="cta-row" style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+        <a class="btn" href="#gratis">Seguir viendo gratis</a>
+        <a id="btnPremium1" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
+      </div>
+
+      <p class="mini" style="margin-top:0.5rem">
+        OSINT legal. La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Premium.
+      </p>
+    </section>
+    <!-- === /TEASER === -->
+
+    <!-- PLANES (SOLO DOS: GRATIS y PREMIUM) -->
     <section class="pricing">
       <div class="wrap grid2">
         <div class="price-card">
-          <h3>Básico</h3>
-          <div class="price">$10 <span>MXN</span></div>
+          <h3>Gratis</h3>
+          <div class="price">$0 <span>MXN</span></div>
           <ul>
-            <li>Búsqueda simple</li>
-            <li>PDF con enlaces verificados</li>
-            <li>Entrega en tu cuenta</li>
+            <li>Vista enmascarada</li>
+            <li>Conteos y dominios ocultos</li>
+            <li>Sin URLs ni capturas nítidas</li>
           </ul>
-          <a class="btn primary" href="./checkout.html?plan=basic">Continuar</a>
+          <a class="btn" href="#gratis">Ver gratis</a>
         </div>
         <div class="price-card highlight">
-          <h3>Pro</h3>
+          <h3>Premium</h3>
           <div class="price">$20 <span>MXN</span></div>
           <ul>
-            <li>Búsquedas ampliadas</li>
+            <li>Enlaces verificados (HTTP&lt;400)</li>
             <li>PDF + ZIP con evidencias</li>
             <li>Prioridad en cola</li>
           </ul>
-          <a class="btn primary" href="./checkout.html?plan=pro">Continuar</a>
+          <a id="btnPremium2" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Pagar Premium</a>
         </div>
       </div>
-      <p class="wrap note">*Pago por BBVA Spin, Nu, depósito Oxxo a cuenta, Bitso o PayPal (@ivanbauza). Validación manual por panel admin.</p>
+      <p class="wrap note">Pago por Stripe (tarjeta). Entrega en tu cuenta. Sin WhatsApp.</p>
     </section>
 
     <!-- FAQ MINI -->
@@ -181,6 +160,22 @@
     </div>
   </footer>
 
+  <!-- ====== ÚNICO SCRIPT: guardar consulta antes de ir a Stripe ====== -->
+  <script>
+    (function () {
+      function saveQuery() {
+        try {
+          var el = document.getElementById('q');
+          var q = el && el.value ? el.value.trim() : '';
+          if (q) localStorage.setItem('bg_last_query', q);
+        } catch (e) {}
+      }
+      var links = document.querySelectorAll('a[data-pl]');
+      links.forEach(function(a){ a.addEventListener('click', saveQuery); });
+    })();
+  </script>
+
+  <!-- (opcional) tu app.js si lo usas -->
   <script src="./app.js"></script>
 </body>
 </html>
