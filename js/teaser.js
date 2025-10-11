@@ -75,3 +75,46 @@ function maskText(t){
     unlocked ? `<li>${e}</li>` : `<li>${e.replace(/(.{2}).+(@).+/, "$1****$2****")}</li>`
   ).join('');
 })();
+// ----- Wiring de botones -----
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('q');
+  const btnGratis  = document.querySelector('.btn.primary, .btn.pro, .btn--gratis') || document.querySelector('button.btn.primary'); // ajusta si usas otra clase
+  const btnPremium = document.querySelector('a.btn.pro, a[href*="pago"], a[href*="checkout"]');
+
+  // 1) Gratis: render teaser y scroll
+  const btnSencilla = document.querySelector('button.btn.primary, .btn-sencilla') 
+                   || document.querySelector('button:has(> span:contains("Búsqueda Sencilla"))'); // fallback
+  if (btnSencilla) {
+    btnSencilla.addEventListener('click', (e) => {
+      e.preventDefault();
+      const q = (input?.value || '').trim() || 'CONSULTA';
+      const teaser = document.getElementById('gratis');
+      // Opcional: pasa la consulta al teaser vía URL para persistir en recarga
+      const url = new URL(window.location.href);
+      url.searchParams.set('q', q);
+      history.replaceState({}, '', url);
+
+      // Si quieres, cambia el título del teaser con la query
+      const counts = document.getElementById('t-counts');
+      if (counts) {
+        // ya se renderiza con js; aquí solo hacemos scroll
+        teaser?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+
+  // 2) Premium: lleva al checkout con la query
+  if (btnPremium) {
+    btnPremium.addEventListener('click', (e) => {
+      // si es <a>, deja que navegue; solo añadimos la ?q=
+      const q = (input?.value || '').trim();
+      if (!q) return; // permite pagar sin query si quieres
+      try {
+        const href = new URL(btnPremium.getAttribute('href'), location.origin);
+        href.searchParams.set('q', q);
+        btnPremium.setAttribute('href', href.pathname + href.search);
+      } catch {}
+    });
+  }
+});
+
