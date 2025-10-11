@@ -1,0 +1,33 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi cuenta — BauzaGPT</title>
+<link rel="stylesheet" href="./estilos.css"></head>
+<body class="wrap" style="max-width:900px;margin:2rem auto">
+<h1>Mis compras</h1>
+<p id="welcome" class="mini"></p>
+<table class="table" style="width:100%;margin-top:1rem">
+  <thead><tr><th>Fecha</th><th>Plan</th><th>Consulta</th><th>Acciones</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  const supabase = createClient('','');
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { location.href = './login.html'; }
+  document.getElementById('welcome').textContent = 'Sesión: ' + (user.email || user.id);
+
+  const { data, error } = await supabase.from('purchases').select('*').order('created_at', { ascending:false });
+  if (error) console.error(error);
+
+  const tbody = document.getElementById('rows');
+  (data || []).forEach(p => {
+    const d = new Date(p.created_at).toLocaleString();
+    const link = ${location.origin}/?unlock= + (p.query ? &q= : '');
+    const tr = document.createElement('tr');
+    tr.innerHTML = <td></td><td></td><td></td>
+      <td><a class="btn" href="" target="_blank" rel="noopener">Ver desbloqueado</a></td>;
+    tbody.appendChild(tr);
+  });
+</script>
+</body></html>

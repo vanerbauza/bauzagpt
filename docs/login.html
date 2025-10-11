@@ -1,44 +1,23 @@
-<!doctype html>
-<html lang="es-MX">
-<head>
-  <meta charset="utf-8">
-  <title>Entrar — BAUZA GPT</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="./estilos.css">
-</head>
-<body>
-  <header class="topbar">
-    <div class="wrap">
-      <a class="brand" href="./">BAUZA <span>GPT</span></a>
-      <nav class="nav">
-        <a class="btn ghost" href="./signup.html">Registrarme</a>
-      </nav>
-    </div>
-  </header>
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Entrar — BauzaGPT</title>
+<link rel="stylesheet" href="./estilos.css"></head>
+<body class="wrap" style="max-width:480px;margin:3rem auto">
+<h1>Entrar</h1>
+<p>Te enviaremos un enlace mágico a tu correo.</p>
+<input id="email" type="email" style="width:100%;padding:.6rem" placeholder="tucorreo@ejemplo.com">
+<button id="send" class="btn primary" style="margin-top:.8rem">Enviar enlace</button>
+<p id="msg" class="mini"></p>
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  const supabase = createClient('',''); // <- reemplaza si lo dejaste vacío
 
-  <main class="wrap" style="padding:40px 0;">
-    <h1>Entrar</h1>
-    <form id="loginForm" class="card" style="max-width:420px;">
-      <label>Email<br><input id="email" type="email" required></label><br><br>
-      <label>Contraseña<br><input id="password" type="password" required></label><br><br>
-      <button class="btn primary" type="submit">Entrar</button>
-    </form>
-    <p class="mini">¿No tienes cuenta? <a href="./signup.html">Crea una</a>.</p>
-  </main>
-
-  <script>
-  const API_BASE = "https://TU-BACKEND.render.com"; // cambia cuando esté
-  const f = document.getElementById('loginForm');
-  f.addEventListener('submit', async (e)=>{
-    e.preventDefault();
+  document.getElementById('send').onclick = async () => {
     const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-    try {
-      // Conectar a /api/auth/login (cuando exista)
-      alert('Login simulado. Conecta aquí tu /api/auth/login y redirige al panel.');
-      // window.location.href = './panel.html';
-    } catch (err) { alert('Error: ' + err.message); }
-  });
-  </script>
-</body>
-</html>
+    const { error } = await supabase.auth.signInWithOtp({
+      email, options:{ emailRedirectTo: location.origin + '/docs/cuenta.html' }
+    });
+    document.getElementById('msg').textContent = error ? ('Error: '+error.message) : 'Revisa tu correo y entra con el enlace.';
+  };
+</script>
+</body></html>
