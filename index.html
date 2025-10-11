@@ -9,7 +9,6 @@
 <body>
   <header class="topbar">
     <div class="brand">
-      <!-- Si tienes logo.svg en /assets, descomenta la img -->
       <!-- <img src="assets/logo.svg" alt="BauzaGPT" class="logo"> -->
       <span class="logo-text">Bauza<span>GPT</span></span>
     </div>
@@ -19,6 +18,7 @@
     </nav>
   </header>
 
+  <!-- HERO -->
   <main class="hero">
     <div class="hero-inner">
       <h1>NO BUSQUES LO QUE NO QUIERES ENCONTRAR</h1>
@@ -40,6 +40,60 @@
     </div>
   </main>
 
+  <!-- === VISTA PREVIA GRATIS ENMASCARADA (TEASER) === -->
+  <section id="gratis" class="teaser">
+    <h2>Vista previa GRATIS — Pro enmascarado</h2>
+    <p class="teaser-sub">Ves TODO el contenido del plan Premium, pero <strong>enmascarado</strong>. Paga para ver URLs y capturas nítidas.</p>
+
+    <div class="teaser-grid">
+      <div class="teaser-box">
+        <h3>Conteos</h3>
+        <ul id="t-counts" class="list"></ul>
+      </div>
+      <div class="teaser-box">
+        <h3>Dominios (enmascarados)</h3>
+        <ul id="t-domains" class="list"></ul>
+      </div>
+    </div>
+
+    <div class="teaser-box">
+      <h3>Matriz de hallazgos</h3>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Fuente</th><th>Dato</th><th>Evidencia</th><th>Conf.</th><th>Enlace</th>
+            </tr>
+          </thead>
+          <tbody id="t-rows"></tbody>
+        </table>
+      </div>
+      <p class="hint">🔒 En modo gratis, las URLs y miniaturas quedan ocultas.</p>
+    </div>
+
+    <div class="teaser-box">
+      <h3>Emails / usuarios potenciales</h3>
+      <ul id="t-emails" class="list"></ul>
+    </div>
+
+    <div class="teaser-images">
+      <div class="img blurred">BORROSA</div>
+      <div class="img blurred">BORROSA</div>
+      <div class="img blurred">BORROSA</div>
+      <div class="img blurred">BORROSA</div>
+      <div class="img blurred">BORROSA</div>
+    </div>
+
+    <div class="cta-row">
+      <a class="btn primary" href="pago.html">Desbloquear Premium ($20 MXN)</a>
+      <a class="btn" href="#faq">Ver preguntas frecuentes</a>
+    </div>
+
+    <p class="note">OSINT legal. La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Premium.</p>
+  </section>
+  <!-- === /TEASER === -->
+
+  <!-- PLANES -->
   <section id="planes" class="plans">
     <h2>Planes</h2>
     <div class="cards">
@@ -56,6 +110,7 @@
     </div>
   </section>
 
+  <!-- FAQ -->
   <section id="faq" class="faq">
     <h2>Preguntas frecuentes</h2>
     <details><summary>¿Qué incluye el PDF?</summary><p>Resumen OSINT y enlaces verificados listos para accionar.</p></details>
@@ -66,8 +121,9 @@
     <small>© 2025 BAUZA GPT — OSINT</small>
   </footer>
 
+  <!-- Tu script actual -->
   <script src="js/script.js"></script>
+  <!-- Script NUEVO del teaser/desbloqueo -->
+  <script src="js/teaser.js"></script>
 </body>
 </html>
-
- 
