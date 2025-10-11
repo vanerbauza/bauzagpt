@@ -13,13 +13,15 @@
 <script>
   const qs = new URLSearchParams(location.search);
   const qParam = qs.get('q'); if (qParam) document.getElementById('q').value = qParam;
+
   document.getElementById('pay').onclick = async () => {
     const email = document.getElementById('email').value.trim();
     const query = document.getElementById('q').value.trim();
     if (!email) { document.getElementById('msg').textContent='Pon tu email 📨'; return; }
     document.getElementById('pay').disabled = true;
 
-    const API = 'https://REEMPLAZA.vercel.app/api/create-checkout-session'; // <- cambia a tu Vercel
+    // 👇 Cambia a tu dominio de Vercel si es distinto
+    const API = 'https://REEMPLAZA.vercel.app/api/create-checkout-session';
 
     try {
       const resp = await fetch(API, {
@@ -29,8 +31,11 @@
       const data = await resp.json();
       if (data.url) location.href = data.url;
       else document.getElementById('msg').textContent = 'No se pudo iniciar pago.';
-    } catch { document.getElementById('msg').textContent = 'Error de red.'; }
-    finally { document.getElementById('pay').disabled = false; }
+    } catch {
+      document.getElementById('msg').textContent = 'Error de red.';
+    } finally {
+      document.getElementById('pay').disabled = false;
+    }
   };
 </script>
 </body></html>

@@ -15,18 +15,24 @@
 
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) { location.href = './login.html'; }
+
   document.getElementById('welcome').textContent = 'Sesión: ' + (user.email || user.id);
 
-  const { data, error } = await supabase.from('purchases').select('*').order('created_at', { ascending:false });
-  if (error) console.error(error);
+  const { data, error } = await supabase.from('purchases')
+    .select('*').order('created_at', { ascending:false });
+  if (error) { console.error(error); }
 
   const tbody = document.getElementById('rows');
   (data || []).forEach(p => {
     const d = new Date(p.created_at).toLocaleString();
     const link = ${location.origin}/?unlock= + (p.query ? &q= : '');
     const tr = document.createElement('tr');
-    tr.innerHTML = <td></td><td></td><td></td>
-      <td><a class="btn" href="" target="_blank" rel="noopener">Ver desbloqueado</a></td>;
+    tr.innerHTML = 
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><a class="btn" href="" target="_blank" rel="noopener">Ver desbloqueado</a></td>
+    ;
     tbody.appendChild(tr);
   });
 </script>

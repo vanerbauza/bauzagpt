@@ -10,12 +10,13 @@
 <p id="msg" class="mini"></p>
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-  const supabase = createClient('',''); // <- reemplaza si lo dejaste vacío
+  const supabase = createClient('',''); // ← rellena en variables de arriba
 
   document.getElementById('send').onclick = async () => {
     const email = document.getElementById('email').value.trim();
     const { error } = await supabase.auth.signInWithOtp({
-      email, options:{ emailRedirectTo: location.origin + '/docs/cuenta.html' }
+      email,
+      options:{ emailRedirectTo: location.origin + '/docs/cuenta.html' }
     });
     document.getElementById('msg').textContent = error ? ('Error: '+error.message) : 'Revisa tu correo y entra con el enlace.';
   };

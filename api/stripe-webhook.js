@@ -33,6 +33,7 @@ export default async function handler(req, res) {
     const email = s.customer_details?.email || s.metadata?.email;
     const plan  = s.metadata?.plan || 'pro';
     const query = s.metadata?.query || '';
+
     const token = crypto.randomBytes(16).toString('hex');
 
     const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
