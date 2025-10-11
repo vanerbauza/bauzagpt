@@ -1,9 +1,8 @@
-// === BAUZAGPT API ===
 const API_URL = "https://bauzagpt-backend.onrender.com";
 
 async function enviarBusqueda() {
   const query = document.getElementById("input-busqueda").value.trim();
-  const plan = "pro"; // o "basico", según el plan que elija el usuario
+  const plan = "pro";
 
   if (!query) {
     alert("Escribe algo para buscar");
