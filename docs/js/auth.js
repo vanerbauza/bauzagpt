@@ -1,52 +1,45 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import {
+  getAuth, GoogleAuthProvider, signInWithPopup,
+  onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-// TODO: pega aquí TU CONFIG de Firebase
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  appId: "TU_APP_ID",
+  apiKey: "AIzaSyD3a7cv735RQPYsXMdn4KWQ-NDugL7WyfI",
+  authDomain: "studio-6473341422-75630.firebaseapp.com",
+  projectId: "studio-6473341422-75630",
+  messagingSenderId: "240684953453",
+  appId: "1:240684953453:web:17686d2dd526afcde8b464"
+  // storageBucket: "studio-6473341422-75630.appspot.com", // si luego usas Storage
 };
 
-const app = initializeApp(firebaseConfig);
+const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Auto-redirect si ya hay sesión
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    // Guarda datos mínimos y redirige
-    user.getIdToken().then((token) => {
-      localStorage.setItem('bauza_token', token);
-      localStorage.setItem('bauza_user', JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName,
-        photo: user.photoURL
-      }));
-      // Por ahora te mando a la cuenta OK (luego será tu dashboard real)
-      window.location.href = './cuenta_ok.html?paid=1';
-    });
+    const token = await user.getIdToken();
+    localStorage.setItem('bauza_token', token);
+    localStorage.setItem('bauza_user', JSON.stringify({
+      uid: user.uid, email: user.email, name: user.displayName, photo: user.photoURL
+    }));
+    location.href = './cuenta_ok.html?paid=1';
   }
 });
 
 window.bauzaLoginGoogle = async () => {
   try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+    const { user } = await signInWithPopup(auth, provider);
     const token = await user.getIdToken();
     localStorage.setItem('bauza_token', token);
     localStorage.setItem('bauza_user', JSON.stringify({
-      uid: user.uid,
-      email: user.email,
-      name: user.displayName,
-      photo: user.photoURL
+      uid: user.uid, email: user.email, name: user.displayName, photo: user.photoURL
     }));
-    window.location.href = './cuenta_ok.html?paid=1';
-  } catch (err) {
-    console.error('Login error', err);
-    alert('No se pudo iniciar sesión. Intenta de nuevo.');
+    location.href = './cuenta_ok.html?paid=1';
+  } catch (e) {
+    console.error(e);
+    alert('No se pudo iniciar sesión. Revisa: Google (Enable) y Authorized domains.');
   }
 };
 
@@ -54,6 +47,5 @@ window.bauzaLogout = async () => {
   await signOut(auth);
   localStorage.removeItem('bauza_token');
   localStorage.removeItem('bauza_user');
-  alert('Sesión cerrada.');
-  window.location.href = './index.html';
+  location.href = './index.html';
 };

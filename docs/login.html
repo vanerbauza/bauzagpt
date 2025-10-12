@@ -1,43 +1,25 @@
 <!doctype html>
 <html lang='es'>
 <head>
-  <meta charset='utf-8' />
-  <meta name='viewport' content='width=device-width,initial-scale=1' />
+  <meta charset='utf-8'/>
+  <meta name='viewport' content='width=device-width,initial-scale=1'/>
   <title>BauzaGPT — Iniciar sesión</title>
-  <meta name='theme-color' content='#4f46e5'/>
   <style>
-    :root{--bg:#0b1220;--card:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--accent:#8b5cf6;}
-    *{box-sizing:border-box}
-    body{margin:0;background:radial-gradient(1200px 900px at 50% -10%,#1a1440 0%,#0b1220 50%,#060913 100%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+    body{margin:0;background:#0b1220;color:#e2e8f0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
     .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
-    .card{width:min(720px,92vw);background:var(--card);border:1px solid #332d63;border-radius:16px;padding:24px}
-    h1{margin:0 0 8px 0;font-weight:700}
-    p{margin:0 0 16px 0;color:var(--muted)}
-    .btn{display:flex;align-items:center;gap:12px;justify-content:center;width:100%;padding:12px 16px;border:1px solid var(--accent);border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;cursor:pointer}
+    .card{width:min(720px,92vw);background:#0f172a;border:1px solid #332d63;border-radius:16px;padding:24px}
+    .btn{display:flex;align-items:center;gap:12px;justify-content:center;width:100%;padding:12px 16px;border:1px solid #8b5cf6;border-radius:10px;color:#e2e8f0;background:transparent;cursor:pointer}
     .btn:hover{background:rgba(139,92,246,.1)}
-    .gicon{width:20px;height:20px;border-radius:4px;background:#fff;display:inline-grid;place-items:center;color:#1a73e8;font-weight:900}
-    .note{margin-top:12px;font-size:13px;color:var(--muted)}
-    .divider{height:1px;background:#272343;margin:16px 0}
-    .brand{font-size:13px;color:#a78bfa;text-transform:uppercase;letter-spacing:.12em}
   </style>
 </head>
 <body>
   <div class='wrap'>
     <div class='card'>
-      <div class='brand'>BAUZA GPT</div>
-      <h1>Iniciar sesión</h1>
-      <p>Usa tu cuenta de Google para entrar a tu panel. Más tarde validaremos pago y planes.</p>
-
-      <button class='btn' onclick='bauzaLoginGoogle()'>
-        <span class='gicon'>G</span>
-        Entrar con Google
-      </button>
-
-      <div class='divider'></div>
-      <p class='note'>Al continuar aceptas los Términos y la Política de Privacidad.</p>
+      <h1>Entrar</h1>
+      <p>Inicia con tu cuenta de Google.</p>
+      <button class='btn' onclick='bauzaLoginGoogle()'>Entrar con Google</button>
     </div>
   </div>
-
   <script type='module' src='./js/auth.js'></script>
 </body>
 </html>
