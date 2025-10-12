@@ -1,39 +1,25 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mi cuenta — BauzaGPT</title>
-<link rel="stylesheet" href="./estilos.css"></head>
-<body class="wrap" style="max-width:900px;margin:2rem auto">
-<h1>Mis compras</h1>
-<p id="welcome" class="mini"></p>
-<table class="table" style="width:100%;margin-top:1rem">
-  <thead><tr><th>Fecha</th><th>Plan</th><th>Consulta</th><th>Acciones</th></tr></thead>
-  <tbody id="rows"></tbody>
-</table>
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-  const supabase = createClient('','');
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Mi cuenta — BauzaGPT</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="max-width:720px;margin:2rem auto;font-family:system-ui,Segoe UI,Arial">
+  <h1>Mi cuenta</h1>
+  <div id="status" style="padding:1rem;margin:.75rem 0;background:#f6f7ff;border-radius:8px"></div>
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) { location.href = './login.html'; }
+  <p>Gracias por tu compra. Estamos procesando tu búsqueda.</p>
+  <p>Soporte: <a href="mailto:soporte@bauzagpt.com">soporte@bauzagpt.com</a></p>
 
-  document.getElementById('welcome').textContent = 'Sesión: ' + (user.email || user.id);
-
-  const { data, error } = await supabase.from('purchases')
-    .select('*').order('created_at', { ascending:false });
-  if (error) { console.error(error); }
-
-  const tbody = document.getElementById('rows');
-  (data || []).forEach(p => {
-    const d = new Date(p.created_at).toLocaleString();
-    const link = ${location.origin}/?unlock= + (p.query ? &q= : '');
-    const tr = document.createElement('tr');
-    tr.innerHTML = 
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><a class="btn" href="" target="_blank" rel="noopener">Ver desbloqueado</a></td>
-    ;
-    tbody.appendChild(tr);
-  });
-</script>
-</body></html>
+  <script>
+    const p = new URLSearchParams(location.search);
+    const box = document.getElementById('status');
+    if (p.get('paid') === '1') {
+      box.textContent = '✅ Pago recibido. Tu búsqueda está en proceso.';
+    } else {
+      box.textContent = 'ℹ️ Aquí verás el estado de tus compras.';
+    }
+  </script>
+</body>
+</html>
