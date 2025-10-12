@@ -1,57 +1,96 @@
-
 <!doctype html>
 <html lang="es-MX">
 <head>
   <meta charset="utf-8">
-  <title>BAUZA GPT — OSINT dorking rápido y verificado</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Búsqueda OSINT  Vista gratis enmascarada y desbloqueo Premium por $20 MXN.">
-  <link rel="icon" href="/docs/favicon.ico">
-  <link rel="stylesheet" href="./estilos.css">
-  <meta property="og:title" content="BAUZA GPT — OSINT ">
+  <title>BAUZA GPT — OSINT dorking rápido y verificado</title>
+  <meta name="description" content="Búsqueda OSINT. Vista gratis enmascarada y desbloqueo Premium por $20 MXN.">
+  <meta property="og:title" content="BAUZA GPT — OSINT">
   <meta property="og:description" content="Vista gratis enmascarada. Premium con enlaces verificados y capturas nítidas.">
   <meta property="og:type" content="website">
+
+  <!-- IMPORTANTE: estás dentro de /docs, por eso las rutas son relativas (sin /docs/) -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="estilos.css">
+  <style>
+    /* mini fallback por si estilos.css no carga */
+    body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto; color:#e2e8f0; background:#0b1220}
+    .wrap{width:min(1100px,92vw);margin:0 auto}
+    .topbar{position:sticky;top:0;background:#0f172a;border-bottom:1px solid #243042}
+    .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:10px 12px}
+    .brand{color:#22d3ee;text-decoration:none;font-weight:700}
+    .brand span{color:#22ff88}
+    .nav a{color:#cbd5e1;margin-left:12px;text-decoration:none}
+    .btn{padding:10px 14px;border:1px solid #22d3ee;border-radius:10px;text-decoration:none}
+    .btn.primary{background:#22d3ee;color:#031}
+    .hero{padding:64px 0}
+    .sub{color:#a5b4fc}
+    .buscador{margin-top:16px;display:grid;gap:10px}
+    .buscador input{padding:12px 14px;border-radius:10px;border:1px solid #334155;background:#0b1220;color:#e2e8f0}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .card{background:#0f172a;border:1px solid #243042;border-radius:12px;padding:14px}
+    .img{height:120px;display:grid;place-items:center;background:#111827;border:1px dashed #334155;border-radius:10px}
+    .blurred{filter:blur(5px)}
+    .price-card{background:#0f172a;border:1px solid #243042;border-radius:12px;padding:16px}
+    .price-card.highlight{outline:2px solid #22d3ee}
+    .price{font-size:28px;margin:6px 0}
+    .mini{font-size:12px;color:#94a3b8}
+    .note{color:#94a3b8;text-align:center;margin-top:8px}
+    .footer{margin:40px 0 20px 0;color:#94a3b8}
+    .footer-flex{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    /* video fondo (actívalo subiendo assets/video/hero.mp4) */
+    .bgvid{position:fixed;inset:0;z-index:-1;overflow:hidden}
+    .bgvid video{position:absolute;min-width:100%;min-height:100%;top:50%;left:50%;transform:translate(-50%,-50%);object-fit:cover;filter:brightness(.45)}
+  </style>
 </head>
 <body>
+
+  <!-- (Opcional) Activa si ya subiste docs/assets/video/hero.mp4 -->
+  <!--
+  <div class="bgvid">
+    <video src="assets/video/hero.mp4" autoplay muted loop playsinline></video>
+  </div>
+  -->
+
   <header class="topbar">
     <div class="wrap">
       <a class="brand" href="./">BAUZA <span>GPT</span></a>
       <nav class="nav">
-        <a href="./docs/servicios.html">Servicios</a>
-        <a href="./docs/faq.html">FAQ</a>
-        <a class="btn ghost" href="./login.html">Entrar</a>
+        <!-- SIN /docs/, ya estamos dentro de /docs -->
+        <a href="servicios.html">Servicios</a>
+        <a href="faq.html">FAQ</a>
+        <a class="btn" href="login.html">Entrar</a>
         <a class="btn primary" href="#gratis">Ver gratis</a>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main class="wrap">
     <!-- HERO -->
     <section class="hero">
-      <div class="wrap">
-        <h1>OSINT dork. Resultados claros.<br><span class="accent">Entrega en PDF y ZIP</span></h1>
-        <p class="sub">Prueba <strong>gratis</strong> (enmascarado). Desbloquea <strong>Premium</strong> por <strong>$20 MXN</strong>.</p>
+      <h1>OSINT dork. Resultados claros.<br><span class="accent">Entrega en PDF y ZIP</span></h1>
+      <p class="sub">Prueba <strong>gratis</strong> (enmascarado). Desbloquea <strong>Premium</strong> por <strong>$20 MXN</strong>.</p>
 
-        <!-- BUSCADOR -->
-        <form id="searchForm" class="buscador">
-          <input id="q" type="text" placeholder="Ej.: Nombre completo, número de teléfono, @usuario de red social" required>
-          <div class="cta-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
-            <a class="btn" href="#gratis" id="btnGratisTop">Ver gratis (enmascarado)</a>
-            <!-- BOTÓN PREMIUM ÚNICO -->
-            <a id="btnPremiumTop" class="btn pro" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
-          </div>
-        </form>
+      <!-- BUSCADOR -->
+      <form id="searchForm" class="buscador">
+        <input id="q" type="text" placeholder="Ej.: Nombre completo, número de teléfono, @usuario de red social" required>
+        <div class="cta-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
+          <a class="btn" href="#gratis" id="btnGratisTop">Ver gratis (enmascarado)</a>
+          <!-- BOTÓN PREMIUM (deja tu link de pago real) -->
+          <a id="btnPremiumTop" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
+        </div>
+      </form>
 
-        <p class="mini"> WhatsApp. Descarga segura desde tu cuenta ocorreo opcional.</p>
-      </div>
+      <p class="mini">Entrega dentro de tu cuenta en bauzagpt.com; opcional por correo.</p>
     </section>
 
     <!-- === VISTA PREVIA GRATIS ENMASCARADA (TEASER) === -->
-    <section id="gratis" class="teaser wrap" style="margin-top:2rem">
+    <section id="gratis" class="teaser" style="margin-top:2rem">
       <h2>Vista previa GRATIS — Pro enmascarado</h2>
       <p class="mini">Ves TODO el contenido del plan Pro, pero <strong>enmascarado</strong>. Desbloquea por $20 MXN para ver URLs y capturas nítidas.</p>
 
-      <div class="grid2" style="gap:1rem;margin-top:1rem">
+      <div class="grid2" style="margin-top:1rem">
         <div class="card">
           <h3>Conteos</h3>
           <ul id="t-counts" class="list"></ul>
@@ -80,7 +119,7 @@
         <ul id="t-emails" class="list"></ul>
       </div>
 
-      <div class="grid3" style="gap:0.75rem;margin-top:1rem">
+      <div class="grid3" style="margin-top:1rem">
         <div class="img blurred">BORROSA</div>
         <div class="img blurred">BORROSA</div>
         <div class="img blurred">BORROSA</div>
@@ -95,14 +134,14 @@
       </div>
 
       <p class="mini" style="margin-top:0.5rem">
-        OSINT. La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Premium.
+        La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Premium.
       </p>
     </section>
     <!-- === /TEASER === -->
 
-    <!-- PLANES (SOLO DOS: GRATIS y PREMIUM) -->
+    <!-- PLANES -->
     <section class="pricing">
-      <div class="wrap grid2">
+      <div class="grid2">
         <div class="price-card">
           <h3>Gratis</h3>
           <div class="price">$0 <span>MXN</span></div>
@@ -117,33 +156,31 @@
           <h3>Premium</h3>
           <div class="price">$20 <span>MXN</span></div>
           <ul>
-            <li>Enlaces verificados (HTTP&lt;200)</li>
+            <li>Enlaces verificados (HTTP &lt; 400)</li>
             <li>PDF + ZIP con evidencias</li>
             <li>Prioridad en cola</li>
           </ul>
           <a id="btnPremium2" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Pagar Premium</a>
         </div>
       </div>
-      <p class="wrap note">Pago por Stripe (tarjeta). Entrega en tu cuenta. Sin WhatsApp.</p>
+      <p class="note">Pago por Stripe (tarjeta). Entrega en tu cuenta. Sin WhatsApp.</p>
     </section>
 
-    <!-- FAQ MINI -->
+    <!-- FAQ MINI (sin WhatsApp, como definimos en el flujo) -->
     <section class="faq">
-      <div class="wrap">
-        <h2>Preguntas rápidas</h2>
-        <details>
-          <summary>¿Cómo recibo mis resultados?</summary>
-          <p>Desde tu cuenta en bauzagpt.com con token de descarga. Opcionalmente por correo.</p>
-        </details>
-        <details>
-          <summary>¿Usan WhatsApp?</summary>
-          <p>Si.,todo se entrega por el sitio  o whatsapp (y correo opcional).</p>
-        </details>
-        <details>
-          <summary>¿Hacen búsquedas dorking?</summary>
-          <p>si. OSINT dorking, público o con tu autorización expresa.</p>
-        </details>
-      </div>
+      <h2>Preguntas rápidas</h2>
+      <details>
+        <summary>¿Cómo recibo mis resultados?</summary>
+        <p>Desde tu cuenta en bauzagpt.com con token de descarga. Opcionalmente por correo.</p>
+      </details>
+      <details>
+        <summary>¿Usan WhatsApp?</summary>
+        <p>No. Todo se entrega dentro de tu cuenta en bauzagpt.com y, opcionalmente, por correo.</p>
+      </details>
+      <details>
+        <summary>¿Hacen búsquedas dorking?</summary>
+        <p>Sí. OSINT dorking con tu autorización expresa cuando se requiera.</p>
+      </details>
     </section>
   </main>
 
@@ -151,17 +188,17 @@
     <div class="wrap footer-flex">
       <div>
         <strong>BAUZA GPT</strong><br>
-        OSINT  con entrega verificada.
+        OSINT con entrega verificada.
       </div>
       <div>
-        <a href="./contacto.html">Contacto</a> ·
-        <a href="./privacidad.html">Privacidad</a> ·
-        <a href="./terminos.html">Términos</a>
+        <a href="contacto.html">Contacto</a> ·
+        <a href="privacidad.html">Privacidad</a> ·
+        <a href="terminos.html">Términos</a>
       </div>
     </div>
   </footer>
 
-  <!-- ====== ÚNICO SCRIPT: guardar consulta antes de ir a Stripe ====== -->
+  <!-- Guarda la última consulta antes de ir a Premium -->
   <script>
     (function () {
       function saveQuery() {
@@ -171,26 +208,23 @@
           if (q) localStorage.setItem('bg_last_query', q);
         } catch (e) {}
       }
-      var links = document.querySelectorAll('a[data-pl]');
-      links.forEach(function(a){ a.addEventListener('click', saveQuery); });
+      document.querySelectorAll('a[data-pl]').forEach(a => a.addEventListener('click', saveQuery));
     })();
   </script>
 
-  <!-- (opcional) tu app.js si lo usas -->
-  <script src="./app.js"></script>
-<script>
-(function(){
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
-  }
-  if (window.caches) {
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-})();
-</script>
+  <!-- Tu app -->
+  <script src="app.js"></script>
+
+  <!-- Limpia Service Workers/cache viejos si los hubiera -->
+  <script>
+    (function(){
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+      }
+      if (window.caches) {
+        caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+      }
+    })();
+  </script>
 </body>
 </html>
-
-
-
-
