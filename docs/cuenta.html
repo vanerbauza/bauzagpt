@@ -4,22 +4,23 @@
   <meta charset="utf-8">
   <title>Mi cuenta — BauzaGPT</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{font-family:system-ui,Segoe UI,Arial;margin:2rem;color:#111;background:#fff}
+    .card{padding:1rem;margin:.75rem 0;background:#f6f7ff;border-radius:8px}
+  </style>
 </head>
-<body style="max-width:720px;margin:2rem auto;font-family:system-ui,Segoe UI,Arial">
+<body>
   <h1>Mi cuenta</h1>
-  <div id="status" style="padding:1rem;margin:.75rem 0;background:#f6f7ff;border-radius:8px"></div>
-
+  <div id="status" class="card">Cargando estado…</div>
   <p>Gracias por tu compra. Estamos procesando tu búsqueda.</p>
   <p>Soporte: <a href="mailto:soporte@bauzagpt.com">soporte@bauzagpt.com</a></p>
 
   <script>
     const p = new URLSearchParams(location.search);
     const box = document.getElementById('status');
-    if (p.get('paid') === '1') {
-      box.textContent = '✅ Pago recibido. Tu búsqueda está en proceso.';
-    } else {
-      box.textContent = 'ℹ️ Aquí verás el estado de tus compras.';
-    }
+    box.textContent = p.get('paid') === '1'
+      ? '✅ Pago recibido. Tu búsqueda está en proceso.'
+      : 'ℹ️ Aquí verás el estado de tus compras.';
   </script>
 </body>
 </html>
