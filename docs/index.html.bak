@@ -41,29 +41,6 @@
             <a id="btnPremiumTop" class="btn pro" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
           </div>
         </form>
-<!-- === Recibir por WhatsApp (sin backend) === -->
-<form id="whForm" class="mini" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
-  <input id="waPhone" type="tel" placeholder="Tu WhatsApp MX (10 dígitos)" pattern="[0-9]{10}"
-         style="padding:10px;border-radius:8px;border:1px solid #223">
-  <button id="waSend" type="button" class="btn">Recibir por WhatsApp</button>
-</form>
-
-<script>
-(function(){
-  const q = document.getElementById('q');
-  const phone = document.getElementById('waPhone');
-  const send  = document.getElementById('waSend');
-  send?.addEventListener('click', ()=>{
-    const num = (phone.value||'').replace(/\D/g,'');
-    if(num.length!==10){ alert('WhatsApp MX de 10 dígitos'); return; }
-    const email = localStorage.getItem('bg_email')||'';
-    const query = (q && q.value) ? q.value.trim() : '';
-    const msg = encodeURIComponent(Hola, soy \.\nMi consulta: "\".\n¿Me envías el resultado aquí por WhatsApp?);
-    // 52 = México. Ajusta prefijo si usas otro país.
-    location.href = https://wa.me/52\?text=\;
-  });
-})();
-</script>
 
         <p class="mini"> WhatsApp. Descarga segura desde tu cuenta ocorreo opcional.</p>
       </div>
@@ -211,50 +188,8 @@
   }
 })();
 </script>
-<!-- === Login con Google (Firebase) === -->
-<button id="btnGoogle" class="btn" style="display:none">Acceder con Google</button>
-<button id="btnSalir"  class="btn" style="display:none">Salir</button>
-<span id="userInfo" class="mini" style="margin-left:.5rem"></span>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
-
-  // TODO: Pega tu configuración real de Firebase:
-  const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_PROJECT_ID.firebaseapp.com",
-    projectId: "TU_PROJECT_ID",
-    appId: "TU_APP_ID"
-  };
-
-  const app   = initializeApp(firebaseConfig);
-  const auth  = getAuth(app);
-  const prov  = new GoogleAuthProvider();
-  const $     = (s)=>document.querySelector(s);
-  const gBtn  = #btnGoogle;
-  const oBtn  = #btnSalir;
-  const uInfo = #userInfo;
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      gBtn.style.display="none"; oBtn.style.display="inline-block";
-      uInfo.textContent = Hola, \;
-      localStorage.setItem("bg_email", user.email||"");
-    } else {
-      gBtn.style.display="inline-block"; oBtn.style.display="none";
-      uInfo.textContent = ""; localStorage.removeItem("bg_email");
-    }
-  });
-
-  gBtn?.addEventListener("click", async ()=>{ try{ await signInWithPopup(auth, prov); }catch(e){ alert("No se pudo iniciar sesión: "+e.message); }});
-  oBtn?.addEventListener("click", async ()=>{ await signOut(auth); });
-</script>
 </body>
 </html>
-
-
-
 
 
 
