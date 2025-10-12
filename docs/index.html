@@ -178,8 +178,19 @@
 
   <!-- (opcional) tu app.js si lo usas -->
   <script src="./app.js"></script>
+<script>
+(function(){
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+  }
+  if (window.caches) {
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+})();
+</script>
 </body>
 </html>
+
 
 
 
