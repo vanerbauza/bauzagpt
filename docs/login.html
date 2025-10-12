@@ -1,24 +1,43 @@
-<!doctype html><html lang="es"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Entrar — BauzaGPT</title>
-<link rel="stylesheet" href="./estilos.css"></head>
-<body class="wrap" style="max-width:480px;margin:3rem auto">
-<h1>Entrar</h1>
-<p>Te enviaremos un enlace mágico a tu correo.</p>
-<input id="email" type="email" style="width:100%;padding:.6rem" placeholder="tucorreo@ejemplo.com">
-<button id="send" class="btn primary" style="margin-top:.8rem">Enviar enlace</button>
-<p id="msg" class="mini"></p>
-<script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-  const supabase = createClient('',''); // ← rellena en variables de arriba
+<!doctype html>
+<html lang='es'>
+<head>
+  <meta charset='utf-8' />
+  <meta name='viewport' content='width=device-width,initial-scale=1' />
+  <title>BauzaGPT — Iniciar sesión</title>
+  <meta name='theme-color' content='#4f46e5'/>
+  <style>
+    :root{--bg:#0b1220;--card:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--accent:#8b5cf6;}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(1200px 900px at 50% -10%,#1a1440 0%,#0b1220 50%,#060913 100%);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+    .wrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+    .card{width:min(720px,92vw);background:var(--card);border:1px solid #332d63;border-radius:16px;padding:24px}
+    h1{margin:0 0 8px 0;font-weight:700}
+    p{margin:0 0 16px 0;color:var(--muted)}
+    .btn{display:flex;align-items:center;gap:12px;justify-content:center;width:100%;padding:12px 16px;border:1px solid var(--accent);border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;cursor:pointer}
+    .btn:hover{background:rgba(139,92,246,.1)}
+    .gicon{width:20px;height:20px;border-radius:4px;background:#fff;display:inline-grid;place-items:center;color:#1a73e8;font-weight:900}
+    .note{margin-top:12px;font-size:13px;color:var(--muted)}
+    .divider{height:1px;background:#272343;margin:16px 0}
+    .brand{font-size:13px;color:#a78bfa;text-transform:uppercase;letter-spacing:.12em}
+  </style>
+</head>
+<body>
+  <div class='wrap'>
+    <div class='card'>
+      <div class='brand'>BAUZA GPT</div>
+      <h1>Iniciar sesión</h1>
+      <p>Usa tu cuenta de Google para entrar a tu panel. Más tarde validaremos pago y planes.</p>
 
-  document.getElementById('send').onclick = async () => {
-    const email = document.getElementById('email').value.trim();
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options:{ emailRedirectTo: location.origin + '/docs/cuenta.html' }
-    });
-    document.getElementById('msg').textContent = error ? ('Error: '+error.message) : 'Revisa tu correo y entra con el enlace.';
-  };
-</script>
-</body></html>
+      <button class='btn' onclick='bauzaLoginGoogle()'>
+        <span class='gicon'>G</span>
+        Entrar con Google
+      </button>
+
+      <div class='divider'></div>
+      <p class='note'>Al continuar aceptas los Términos y la Política de Privacidad.</p>
+    </div>
+  </div>
+
+  <script type='module' src='./js/auth.js'></script>
+</body>
+</html>
