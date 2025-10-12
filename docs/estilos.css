@@ -48,3 +48,12 @@ a{color:var(--primary);text-decoration:none}
   .hero h1{font-size:30px}
   .buscador{flex-direction:column}
 }
+
+/* Fondo GIF */
+.bg-gif{position:fixed;inset:0;z-index:-1;pointer-events:none;background:#000}
+.bg-gif img{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  min-width:100%;min-height:100%;object-fit:cover;opacity:.18;
+}
+#whForm{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem}
+#whForm input{padding:10px;border-radius:8px;border:1px solid #223;background:#0a1020;color:#cbd5e1}
