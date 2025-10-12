@@ -53,10 +53,111 @@
 </section>
 <!-- === /HERO === -->
 <nav style="padding:8px 0; text-align:center"><a href="/osint.html" style="margin-right:12px">OSINT</a><a href="/pagos.html">Pagos</a></nav>
+<!-- === GOOGLE PAY === -->
+<script src="https://js.stripe.com/v3/"></script>
+<section id="wallet" style="padding:40px 16px; background:#0b0f1a; color:#e5e7eb;">
+  <h2 style="text-align:center; font:800 28px system-ui">Paga con Google Pay</h2>
+  <div style="display:grid; gap:16px; max-width:420px; margin:16px auto;">
+    <div class="row" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap">
+      <button data-amount="1000" class="plan" style="padding:10px 14px;border-radius:10px;background:#22c55e;color:#0b0f1a;font-weight:800;border:0">Plan  MXN</button>
+      <button data-amount="2000" class="plan" style="padding:10px 14px;border-radius:10px;background:#16a34a;color:#0b0f1a;font-weight:800;border:0">Plan  MXN</button>
+    </div>
+    <div id="gpay-button" style="min-height:48px;"></div>
+    <small style="color:#94a3b8; text-align:center">Si tu navegador soporta Google Pay, verás el botón aquí mismo.</small>
+  </div>
+</section>
+<script>
+(async()=>{
+  const PUBLISHABLE_KEY = "pk_live_TU_CLAVE_AQUI";
+  const WORKER_URL = "https://bauzagpt-pay.TU_SUBDOMINIO.workers.dev";
+  const stripe = Stripe(PUBLISHABLE_KEY);
+  let currentAmount = 1000;
+
+  const pr = stripe.paymentRequest({
+    country: "MX", currency: "mxn",
+    total: { label: "BAUZA GPT", amount: currentAmount },
+    requestPayerName: true, requestPayerEmail: true
+  });
+
+  const can = await pr.canMakePayment();
+  if (can && can.googlePay === true) {
+    const elements = stripe.elements();
+    const btn = elements.create("paymentRequestButton", {
+      paymentRequest: pr,
+      style: { paymentRequestButton: { theme: "dark", height: "48px", type: "buy" } }
+    });
+    btn.mount("#gpay-button");
+
+    document.querySelectorAll(".plan").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        currentAmount = Number(b.dataset.amount);
+        pr.update({ total: { label: "BAUZA GPT", amount: currentAmount }});
+        b.textContent = b.textContent.replace(" ✓","") + " ✓";
+        setTimeout(()=>{ b.textContent = b.textContent.replace(" ✓","") }, 700);
+      });
+    });
+
+    pr.on("paymentmethod", async ev => {
+      try{
+        const resp = await fetch(WORKER_URL, {
+          method: "POST", headers: { "Content-Type":"application/json" },
+          body: JSON.stringify({ amount: currentAmount })
+        });
+        const { clientSecret, error } = await resp.json();
+        if(error){ ev.complete("fail"); alert("Error creando pago"); return; }
+
+        const { paymentIntent, error:confirmErr } = await stripe.confirmCardPayment(
+          clientSecret, { payment_method: ev.paymentMethod.id }, { handleActions: true }
+        );
+        if(confirmErr){ ev.complete("fail"); alert(confirmErr.message||"Error"); return; }
+
+        ev.complete("success");
+        if(paymentIntent.status === "requires_action"){
+          const { error: actionErr } = await stripe.confirmCardPayment(clientSecret);
+          if(actionErr){ alert(actionErr.message||"Error 3DS"); return; }
+        }
+        window.location.href = "/cuenta_ok.html";
+      }catch(e){ console.error(e); ev.complete("fail"); alert("Error inesperado"); }
+    });
+  } else {
+    document.getElementById("gpay-button").innerHTML =
+      "<p style='color:#94a3b8; text-align:center'>Tu navegador no soporta Google Pay.</p>";
+  }
+})();
+</script>
+<!-- === /GOOGLE PAY === -->
+<!-- === LOGIN CON GOOGLE (GIS) === -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="TU_CLIENT_ID.apps.googleusercontent.com"
+     data-context="signin"
+     data-auto_prompt="true"
+     data-callback="onGoogleCredential"></div>
+<div class="g_id_signin"
+     data-type="standard" data-size="large" data-theme="outline"
+     data-text="signin_with" data-shape="pill" data-logo_alignment="left"></div>
+<script>
+  async function onGoogleCredential(response){
+    try{
+      const r = await fetch("https://auth.bauzagpt.com/verify-google", {
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ id_token: response.credential })
+      });
+      const data = await r.json();
+      if(data.ok){
+        localStorage.setItem("user", JSON.stringify(data.user));
+        location.href = "/cuenta_ok.html";
+      } else { alert("No pudimos verificar tu cuenta"); }
+    }catch(e){ console.error(e); alert("Error en login"); }
+  }
+</script>
+<!-- === /LOGIN CON GOOGLE === -->
 </body>
 </html>
 
 <a class='btn' href='./login.html'>Entrar con Google</a>
+
+
 
 
 
