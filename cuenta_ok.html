@@ -1,0 +1,76 @@
+<!doctype html>
+const btnBuscar = document.getElementById('btnBuscar');
+
+
+function renderUser(user){
+if(!user){
+loginArea.innerHTML = `
+<button class="btn" id="btnAnon">Probar gratis (enmascarado)</button>
+<button class="btn btn-primary" id="btnLogin">Entrar con Google</button>`;
+attachHandlers();
+return;
+}
+const name = user.displayName || user.email || 'Usuario';
+const photo = user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name);
+loginArea.innerHTML = `
+<div class="user">
+<img src="${photo}" alt="avatar"/>
+<div>
+<div style="font-size:14px">${name}</div>
+<div class="muted" style="font-size:12px">Sesión activa</div>
+</div>
+</div>
+<button class="btn" id="btnLogout">Salir</button>`;
+document.getElementById('btnLogout').onclick = async () => {
+try { await auth.signOut(); } catch(_){}
+localStorage.removeItem('bauza_token');
+localStorage.removeItem('bauza_user');
+renderUser(null);
+}
+}
+
+
+function attachHandlers(){
+const _btnLogin = document.getElementById('btnLogin');
+const _btnAnon = document.getElementById('btnAnon');
+
+
+if(_btnLogin){ _btnLogin.onclick = async ()=>{
+try{
+const res = await auth.signInWithPopup(provider);
+const user = res.user;
+const token = await user.getIdToken();
+localStorage.setItem('bauza_token', token);
+localStorage.setItem('bauza_user', JSON.stringify({
+uid: user.uid, email: user.email, name: user.displayName, photo: user.photoURL
+}));
+// Por ahora: redirige a una página simple de cuenta OK
+window.location.href = './cuenta_ok.html?paid=1';
+}catch(err){
+alert('No se pudo iniciar sesión: ' + (err?.message||err));
+}
+}}
+
+
+if(_btnAnon){ _btnAnon.onclick = ()=>{
+const q = document.getElementById('q').value.trim();
+if(!q){ alert('Escribe algo para la demo (teléfono, correo o nickname).'); return; }
+// Demo local: sólo simula un resultado simple
+alert('Demo enmascarada OK. Resultado para: ' + q + '\n(La versión PRO procesará en backend y entregará PDF/ZIP).');
+}}
+
+
+if(btnBuscar){ btnBuscar.onclick = ()=>{
+const q = document.getElementById('q').value.trim();
+if(!q){ alert('Escribe algo para la demo.'); return; }
+alert('Buscar (demo): ' + q);
+}}
+}
+
+
+// ========= 4) Observa el estado de auth =========
+if(auth){ auth.onAuthStateChanged((u)=>renderUser(u)); }
+attachHandlers();
+</script>
+</body>
+</html>
