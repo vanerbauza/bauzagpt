@@ -1,0 +1,136 @@
+<!--
+Archivo 1: /docs/dorks.html  (FRONTEND PURO)
+Copia este archivo a tu carpeta /docs y súbelo. No requiere backend.
+-->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BAUZA GPT — Dorks Builder</title>
+  <style>
+    :root{--bg:#0b1220;--card:#0f172a;--muted:#94a3b8;--text:#e2e8f0;--accent:#22d3ee;--purple:#7c3aed}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 900px at 50% -10%,#12203a 0%,#0b1220 40%,#060913 100%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto}
+    .wrap{min-height:100%;display:grid;place-items:center;padding:24px}
+    .card{width:min(100%,1040px);background:linear-gradient(180deg,rgba(124,58,237,.15),rgba(124,58,237,.02)),var(--card);border:1px solid rgba(124,58,237,.35);border-radius:20px;box-shadow:0 20px 80px rgba(124,58,237,.15);padding:24px}
+    h1{margin:0 0 6px 0;font-weight:700} .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    fieldset{border:1px solid rgba(124,58,237,.35);border-radius:14px;padding:14px}
+    legend{padding:0 6px;color:var(--muted)}
+    input,select,textarea{width:100%;background:#0c1426;border:1px solid rgba(255,255,255,.12);color:var(--text);border-radius:10px;padding:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn{background:var(--purple);color:#fff;border:0;border-radius:12px;padding:12px 14px;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,.18)}
+    .out{background:#0c1426;border:1px dashed rgba(255,255,255,.2);padding:12px;border-radius:12px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{background:#0c1426;border:1px solid rgba(255,255,255,.18);padding:6px 10px;border-radius:999px;font-size:13px;cursor:pointer}
+    .chip:hover{background:rgba(255,255,255,.06)}
+  </style>
+</head>
+<body>
+<div class="wrap"><div class="card">
+  <h1>BAUZA GPT — <span class="muted">Dorks Builder</span></h1>
+  <p class="muted">Arma tu consulta con dorks y ábrela directamente en Google (se abre en otra pestaña). Nada se envía a servidor.</p>
+
+  <div class="grid">
+    <fieldset>
+      <legend>Entrada</legend>
+      <div class="row">
+        <div>
+          <label>Palabras clave (comillas exactas si quieres)</label>
+          <input id="kw" placeholder='"correo filtrado" ivan bauza'>
+        </div>
+        <div>
+          <label>Operador booleano</label>
+          <select id="bool">
+            <option value="">(ninguno)</option>
+            <option value=" OR ">OR</option>
+            <option value=" AND ">AND</option>
+            <option value=" - ">NOT (-)</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>site:</label>
+          <input id="site" placeholder="example.com o *.gob.mx">
+        </div>
+        <div>
+          <label>inurl:</label>
+          <input id="inurl" placeholder="login | admin | cuentas">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>intitle:</label>
+          <input id="intitle" placeholder="index of / backups">
+        </div>
+        <div>
+          <label>filetype/ext:</label>
+          <input id="filetype" placeholder="pdf,xls,xlsx,txt,log">
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>after (YYYY-MM-DD)</label>
+          <input id="after" placeholder="2024-01-01">
+        </div>
+        <div>
+          <label>before (YYYY-MM-DD)</label>
+          <input id="before" placeholder="2025-01-01">
+        </div>
+      </div>
+      <div class="chips" id="presets"></div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Salida</legend>
+      <label>Consulta generada</label>
+      <div class="out" id="q"></div>
+      <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="openGoogle">Abrir en Google</button>
+        <button class="btn secondary" id="copyQ">Copiar consulta</button>
+        <button class="btn secondary" id="reset">Limpiar</button>
+      </div>
+      <p class="muted" style="margin-top:10px">Consejo: agrega comillas dobles para coincidencia exacta, usa OR para alternativas y el guión <code>-palabra</code> para excluir.</p>
+    </fieldset>
+  </div>
+</div></div>
+<script>
+  const $ = (id)=>document.getElementById(id);
+  const fields = ['kw','bool','site','inurl','intitle','filetype','after','before'];
+  fields.forEach(id=>$(id).addEventListener('input',render));
+  $('reset').onclick = ()=>{ fields.forEach(id=>$(id).value=''); render(); };
+  $('copyQ').onclick = async ()=>{ await navigator.clipboard.writeText($('q').textContent); alert('Consulta copiada'); };
+  $('openGoogle').onclick = ()=>{ const q = encodeURIComponent($('q').textContent.trim()); if(!q) return alert('Arma tu dork primero'); window.open('https://www.google.com/search?q='+q,'_blank'); };
+
+  const presetList = [
+    {label:'Index of', q:'"index of" (backup | admin | .git | .env) -github -stackoverflow'},
+    {label:'Correos visibles', q:'("@gmail.com" | "@hotmail.com" | "@outlook.com") site:mx'},
+    {label:'PDF sensibles', q:'filetype:pdf (contraseña | credenciales | “uso interno”)'},
+    {label:'Listas CSV/XLS', q:'(filetype:csv | filetype:xls | filetype:xlsx) (usuarios | correos) -template'},
+    {label:'Paneles login', q:'intitle:("login"|"iniciar sesión") inurl:(admin|auth|signin)'}
+  ];
+  const presets = $('presets');
+  presetList.forEach(p=>{ const el=document.createElement('div'); el.className='chip'; el.textContent=p.label; el.onclick=()=>{$('kw').value = ($('kw').value? $('kw').value+' ': '') + p.q; render(); }; presets.appendChild(el); });
+
+  function render(){
+    const kw=$('kw').value.trim(); const bool=$('bool').value; const site=$('site').value.trim(); const inurl=$('inurl').value.trim(); const intitle=$('intitle').value.trim();
+    const ft=$('filetype').value.trim(); const after=$('after').value.trim(); const before=$('before').value.trim();
+    let parts=[]; if(kw) parts.push(kw);
+    if(site) parts.push(`site:${site}`);
+    if(inurl) parts.push(`inurl:(${inurl})`);
+    if(intitle) parts.push(`intitle:(${intitle})`);
+    if(ft){ const ex = ft.split(',').map(s=>s.trim()).filter(Boolean); if(ex.length===1){ parts.push(`filetype:${ex[0]}`) } else if(ex.length>1){ parts.push('('+ex.map(e=>`filetype:${e}`).join(' OR ')+')') } }
+    if(after) parts.push(`after:${after}`);
+    if(before) parts.push(`before:${before}`);
+    // Operador booleano entre palabras clave y resto (si procede)
+    if(bool && kw && (site||inurl||intitle||ft||after||before)){
+      const a = kw, b = parts.slice(1).join(' '); $('q').textContent = `${a}${bool}${b}`; return;
+    }
+    $('q').textContent = parts.join(' ');
+  }
+  render();
+</script>
