@@ -12,9 +12,15 @@
     "preview": "npm run docs:preview"
   },
   "devDependencies": {
-    "vitepress": "^1.2.3"
+    "vitepress": "^1.6.4"
   },
   "engines": {
     "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "g": "^2.0.1",
+    "login": "^0.8.0",
+    "wrangler": "^4.42.2"
   }
 }
