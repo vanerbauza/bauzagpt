@@ -1,0 +1,63 @@
+# --- Visibilidad general (SEO clásico) ---
+User-agent: *
+Allow: /
+
+# --- Permitidos (te convienen) ---
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
+User-agent: Applebot
+Allow: /
+User-agent: FacebookExternalHit
+Allow: /
+User-agent: PetalBot
+Allow: /
+
+# --- AI Search (lo dejamos permitido para alcance IA) ---
+User-agent: OAI-SearchBot
+Allow: /
+
+# --- Bloqueo de scrapers/IA que no te aportan ---
+User-agent: GPTBot
+Disallow: /
+User-agent: ChatGPT-User
+Disallow: /
+User-agent: ClaudeBot
+Disallow: /
+User-agent: Claude-SearchBot
+Disallow: /
+User-agent: Claude-User
+Disallow: /
+User-agent: PerplexityBot
+Disallow: /
+User-agent: Perplexity-User
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Bytespider
+Disallow: /
+User-agent: Meta-ExternalAgent
+Disallow: /
+User-agent: Meta-ExternalFetcher
+Disallow: /
+User-agent: Google-CloudVertexBot
+Disallow: /
+User-agent: Amazonbot
+Disallow: /
+User-agent: Novellum AI Crawl
+Disallow: /
+User-agent: MistralAI-User
+Disallow: /
+User-agent: Anchor Browser
+Disallow: /
+User-agent: ProRataInc
+Disallow: /
+User-agent: Timpibot
+Disallow: /
+
+# --- Directorios sensibles (por si los usas) ---
+Disallow: /admin
+Disallow: /api
+Disallow: /private
+Disallow: /descargas
