@@ -1,154 +1,62 @@
-<!doctype html><html lang="es">
-<head>
+<!doctype html><html lang="es"><head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>bauzaGPT-AI</title>
-<meta name="description" content="Pentesting ético & OSINT legal. Búsquedas con saldo.">
+<title>BAUZA GPT — Pentesting ético & OSINT legal</title>
+<meta name="description" content="Pentesting ético, OSINT legal y guía anti-extorsión digital.">
+<link rel="preconnect" href="https://accounts.google.com">
 <style>
-:root{
-  --bg:#0b1220; --panel:#0f172a; --ink:#e2e8f0; --muted:#9fb0c6;
-  --cyan:#22d3ee; --vio:#7c3aed; --vio-d:#5b21b6; --line:#21304d;
-}
+:root{--bg:#0b1220;--panel:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--cyan:#22d3ee;--vio:#7c3aed;--ring:#a78bfa}
 *{box-sizing:border-box} html,body{height:100%}
-body{
-  margin:0; color:var(--ink);
-  background:radial-gradient(1400px 1000px at 50% -10%,#12203a 0%,#0b1220 45%,#060913 100%);
-  font:16px/1.45 system-ui,Segoe UI,Roboto,Ubuntu;
-  overflow-x:hidden;
-}
-.wrap{min-height:100svh;display:grid;place-items:center;padding:24px;position:relative}
-
-/* ===== OJOS FULL SCREEN ===== */
-.eyes{
-  position:fixed; inset:0; z-index:1; pointer-events:none;
-  display:grid; place-items:center; opacity:.95;
-}
-.eyes-inner{
-  /* ocupa todo el ancho y se adapta a alto */
-  width: min(1800px, 120vw);
-  aspect-ratio: 16/6; /* más panorámico para ojos enormes */
-  position:relative;
-  filter: drop-shadow(0 40px 80px rgba(0,0,0,.55));
-}
-.eye{
-  position:absolute; top:55%; /* ligeramente más abajo */
-  width:42%; aspect-ratio:5/3;
-  transform:translateY(-50%);
-  background:radial-gradient(38% 72% at 50% 60%, #fff 0 62%, #e8e8e8 63% 100%);
-  border-radius:60%/72%; overflow:hidden;
-}
-.eye.left{ left:3% } .eye.right{ right:3% }
-.pupil{
-  --x:0%; --y:0%;
-  position:absolute; left:50%; top:58%;
-  width:26%; aspect-ratio:1/1; border-radius:50%; background:#0a0a0a;
-  transform:translate(calc(-50% + var(--x)), calc(-50% + var(--y)));
-  transition: transform .08s linear;
-  box-shadow:0 0 0 12px rgba(0,0,0,.15) inset;
-}
-
-/* ===== HUD/UI ===== */
-.topbar{position:fixed; right:24px; top:20px; display:flex; gap:10px; z-index:3}
-.btn{border:0; border-radius:12px; padding:12px 16px; cursor:pointer; font-weight:600}
-#login{background:linear-gradient(135deg,var(--cyan),#5eead4); color:#062028}
-#logout{display:none; background:transparent; color:var(--ink); border:1px solid var(--line)}
-
-.panel{
-  position:relative; z-index:2;
-  width:min(760px,92vw);
-  background:color-mix(in oklab,var(--panel) 88%, #000 12%);
-  border:1px solid var(--line); border-radius:18px; padding:28px 24px; backdrop-filter:blur(4px);
-  box-shadow:0 10px 36px rgba(0,0,0,.5);
-}
-h1{margin:0 0 10px; text-align:center; font-weight:800; letter-spacing:.2px}
-h1 .brand{color:var(--cyan)} h1 .ai{opacity:.9}
-.tag{display:block; text-align:center; color:var(--muted); margin:-6px 0 16px}
-
-.row{display:flex; gap:10px; flex-wrap:wrap; justify-content:center}
-input[type="text"]{
-  flex:1; min-width:260px; max-width:540px;
-  background:#0b1328; color:var(--ink);
-  border:1px solid var(--line); border-radius:12px; padding:12px 14px;
-  outline:2px solid transparent; outline-offset:2px; transition:border-color .15s, outline-color .15s;
-}
-input[type="text"]:focus{border-color:var(--cyan); outline-color:#1f9fbd55}
-
-.cta{display:flex; gap:10px; justify-content:center; margin-top:12px}
-.btn-buy{background:var(--vio); color:#fff; box-shadow:0 6px 16px rgba(124,58,237,.25)}
-.btn-buy.premium{background:linear-gradient(135deg,var(--vio),var(--vio-d))}
-.btn-buy:hover{filter:brightness(1.04)} .btn-buy:active{transform:translateY(1px)}
-
-.badges{display:flex; gap:8px; justify-content:center; margin-top:12px; color:var(--muted); font-size:13px}
-.badge{padding:6px 10px; border-radius:999px; border:1px solid var(--line); background:#0b1328}
-.small{margin-top:10px; text-align:center; color:var(--muted); font-size:13px}
-
-/* reduce motion */
-@media (prefers-reduced-motion:reduce){
-  .pupil{transition:none}
-}
+body{margin:0;background:#0b1220;color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,Ubuntu,Arial}
+.hero{min-height:100svh;display:grid;place-items:center;position:relative;overflow:hidden}
+.eyes{position:absolute;inset:0;background:
+  radial-gradient(220px 130px at 35% 40%, rgba(255,255,255,.09), transparent 60%),
+  radial-gradient(220px 130px at 65% 40%, rgba(255,255,255,.09), transparent 60%),
+  radial-gradient(1200px 700px at 50% -10%, #12203a 0%, #0b1220 40%, #060913 100%)}
+.panel{position:relative;z-index:2;background:rgba(15,23,42,.7);border:1px solid #21304d;border-radius:18px;padding:22px 20px;backdrop-filter: blur(4px);width:min(92vw,880px)}
+h1{margin:0 0 6px;color:var(--cyan);font-weight:800;letter-spacing:.3px}
+.lead{margin:0 0 14px;color:var(--muted)}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.badge{border:1px dashed var(--ring);color:#c7bdfc;border-radius:999px;padding:6px 10px;font-size:12px}
+.cta{display:inline-block;padding:10px 16px;border-radius:12px;background:var(--vio);color:#fff;text-decoration:none}
+.gbox{margin-top:12px}
+.footer{position:fixed;left:0;right:0;bottom:10px;text-align:center;font-size:12px;color:#8aa0bd}
+a{color:#a7f3d0}
 </style>
-</head>
-<body>
-  <!-- OJOS EN FONDO -->
-  <div class="eyes" aria-hidden="true">
-    <div class="eyes-inner">
-      <div class="eye left"><div class="pupil" id="pL"></div></div>
-      <div class="eye right"><div class="pupil" id="pR"></div></div>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head><body>
+<section class="hero">
+  <div class="eyes" aria-hidden="true"></div>
+  <div class="panel">
+    <div class="row"><span class="badge">bauzaGPT • hardening • respuesta a incidentes</span></div>
+    <h1>Pentesting ético & OSINT legal</h1>
+    <p class="lead">Auditorías, hardening y guía anti-extorsión digital. Inicia sesión para comenzar.</p>
+
+    <div id="g_id_onload"
+         data-client_id="1040729037625-jegfcqppe6eatkstfrvoshbe690kank6.apps.googleusercontent.com"
+         data-callback="onGoogleCredential"
+         data-auto_select="false"
+         data-itp_support="true"></div>
+
+    <div class="gbox">
+      <div class="g_id_signin"
+           data-type="standard" data-size="large" data-theme="outline"
+           data-shape="pill" data-text="continue_with" data-logo_alignment="left"></div>
+    </div>
+
+    <div class="row" style="margin-top:14px">
+      <a class="cta" href="./precios.html">$10 MXN / $20 MXN</a>
+      <a class="cta" style="background:#0f172a;border:1px solid #21304d;color:#e2e8f0" href="./escudo.html">BAUZA SHIELD</a>
     </div>
   </div>
-
-  <!-- BOTONES SUPERIORES -->
-  <div class="topbar">
-    <button id="login" class="btn">Accede con Google</button>
-    <button id="logout" class="btn">Salir</button>
-  </div>
-
-  <!-- PANEL -->
-  <div class="wrap">
-    <div class="panel">
-      <h1><span class="brand">bauzaGPT</span><span class="ai">-AI</span></h1>
-      <span class="tag">Pentesting ético &amp; OSINT legal</span>
-
-      <div class="row">
-        <input id="q" type="text" placeholder="Escribe tu búsqueda…">
-      </div>
-
-      <div class="cta">
-        <button id="buy10" class="btn btn-buy">$10 MXN</button>
-        <button id="buy20" class="btn btn-buy premium">$20 MXN</button>
-      </div>
-
-      <div class="badges">
-        <span class="badge">👤 <span id="who">Invitado</span></span>
-        <span class="badge">💳 Créditos: <span id="credits">0</span></span>
-      </div>
-
-      <p class="small">UI lista. Luego conectamos Google/Firebase + Stripe/Worker para saldo y búsquedas.</p>
-    </div>
-  </div>
+</section>
+<div class="footer">© bauzaGPT — Un simple ciudadano chingón.</div>
 
 <script>
-  // Pupilas siguen el cursor (limitadas al ojo)
-  const pL=document.getElementById('pL'), pR=document.getElementById('pR');
-  function track(e){
-    const box = document.querySelector('.eyes-inner').getBoundingClientRect();
-    const cx = box.left + box.width/2, cy = box.top + box.height*0.58;
-    const dx = Math.max(-90, Math.min(90, e.clientX - cx));  // +-90px
-    const dy = Math.max(-55, Math.min(55, e.clientY - cy));  // +-55px
-    const map = (v, maxIn, maxOut)=> v/maxIn*maxOut;
-    const x = map(dx, 90, 34), y = map(dy, 55, 18);
-    pL.style.setProperty('--x', x+'px'); pL.style.setProperty('--y', y+'px');
-    pR.style.setProperty('--x', x+'px'); pR.style.setProperty('--y', y+'px');
-  }
-  addEventListener('mousemove', track, {passive:true});
-
-  // Placeholders de login/créditos
-  const $ = s=>document.querySelector(s);
-  let logged=false, credits=0;
-  $('#login').onclick=()=>{logged=true; $('#who').textContent='usuario@gmail.com'; $('#login').style.display='none'; $('#logout').style.display='inline-block';}
-  $('#logout').onclick=()=>{logged=false; $('#who').textContent='Invitado'; $('#login').style.display='inline-block'; $('#logout').style.display='none';}
-  $('#buy10').onclick=()=>{ if(!logged) return alert('Inicia sesión'); credits+=1; $('#credits').textContent=credits; }
-  $('#buy20').onclick=()=>{ if(!logged) return alert('Inicia sesión'); credits+=2; $('#credits').textContent=credits; }
+function onGoogleCredential(resp){
+  console.log("[GSI] credential (JWT):", resp.credential);
+  alert("Login con Google OK. Abre la consola del navegador para ver el token.");
+  // TODO: enviar resp.credential a tu backend para verificar sesión
+}
 </script>
-</body>
-</html>
+</body></html>
