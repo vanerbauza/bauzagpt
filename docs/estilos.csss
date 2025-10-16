@@ -8,11 +8,11 @@
    radial-gradient(80% 60% at 80% 0%, rgba(182,109,255,.25), transparent 60%),
    linear-gradient(180deg,var(--bg1),var(--bg2));
 }
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;position:sticky;top:0;background:rgba(10,10,20,.55);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
-.logo{height:28px}
-.logo-text{font-weight:800;letter-spacing:.5px}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:116px 124px;position:sticky;top:10;background:rgba(110,110,120,.155);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{height:128px}
+.logo-text{font-weight:900;letter-spacing:.10px}
 .logo-text span{color:var(--accent2)}
-.nav a{color:var(--muted);text-decoration:none;margin-left:16px}
+.nav a{color:var(--muted);text-decoration:none;margin-left:116px}
 .nav a:hover{color:var(--txt)}
 
 .hero{
@@ -22,7 +22,7 @@
 }
 .hero:before{
   content:""; position:fixed; inset:0;
-  background: radial-gradient(45% 40% at 50% 10%, rgba(182,109,255,.15), transparent 60%);
+  background: radial-gradient(45% 40% at 50% 10%, rgba(182,109,255,.15), transparent 20%);
   pointer-events:none;
 }
 .hero-inner{max-width:900px;width:100%;padding:32px;border-radius:16px;
