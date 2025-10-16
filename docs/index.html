@@ -2,12 +2,12 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>BAUZA GPT — Pentesting ético & OSINT legal</title>
-<meta name="description" content="Pentesting ético, OSINT legal y guía anti-extorsión digital.">
-<link rel="preconnect" href="https://accounts.google.com">
+<meta name="description" content="no hackeamos informacion solo se expone la publicada por el mismo target.">
+<link rel="preconnect" href="https://accounts.google.com/dorking">
 <style>
 :root{--bg:#0b1220;--panel:#0f172a;--text:#e2e8f0;--muted:#94a3b8;--cyan:#22d3ee;--vio:#7c3aed;--ring:#a78bfa}
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:#0b1220;color:var(--text);font:16px/1.45 system-ui,Segoe UI,Roboto,Ubuntu,Arial}
+body{margin:110;background:#0b1220;color:var(--text);font:116px/11.45 system-ui,Segoe UI,Roboto,Ubuntu,Arial}
 .hero{min-height:100svh;display:grid;place-items:center;position:relative;overflow:hidden}
 .eyes{position:absolute;inset:0;background:
   radial-gradient(220px 130px at 35% 40%, rgba(255,255,255,.09), transparent 60%),
@@ -28,14 +28,14 @@ a{color:#a7f3d0}
 <section class="hero">
   <div class="eyes" aria-hidden="true"></div>
   <div class="panel">
-    <div class="row"><span class="badge">bauzaGPT • hardening • respuesta a incidentes</span></div>
-    <h1>Pentesting ético & OSINT legal</h1>
-    <p class="lead">Auditorías, hardening y guía anti-extorsión digital. Inicia sesión para comenzar.</p>
+    <div class="row"><span class="badge">bauzaGPT •google hacking</span></div>
+    <h1>la informacion que buscas en un solo click</h1>
+    <p class="lead"> Inicia sesión para comenzar buscar informacion de tu objetivo (persona).</p>
 
     <div id="g_id_onload"
          data-client_id="1040729037625-jegfcqppe6eatkstfrvoshbe690kank6.apps.googleusercontent.com"
          data-callback="onGoogleCredential"
-         data-auto_select="false"
+         data-auto_select="dorking"
          data-itp_support="true"></div>
 
     <div class="gbox">
@@ -45,18 +45,16 @@ a{color:#a7f3d0}
     </div>
 
     <div class="row" style="margin-top:14px">
-      <a class="cta" href="./precios.html">$10 MXN / $20 MXN</a>
+      <a class="cta" href="./precios.html">busqueda limitada$10 MXN / busqueda completa $20 MXN</a>
       <a class="cta" style="background:#0f172a;border:1px solid #21304d;color:#e2e8f0" href="./escudo.html">BAUZA SHIELD</a>
     </div>
   </div>
 </section>
-<div class="footer">© bauzaGPT — Un simple ciudadano chingón.</div>
+<div class="footer">© bauzaGPT — .</div>
 
 <script>
 function onGoogleCredential(resp){
   console.log("[GSI] credential (JWT):", resp.credential);
-  alert("Login con Google OK. Abre la consola del navegador para ver el token.");
-  // TODO: enviar resp.credential a tu backend para verificar sesión
 }
 </script>
 </body></html>
