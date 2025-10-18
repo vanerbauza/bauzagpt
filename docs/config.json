@@ -5,7 +5,7 @@
     "projectId": "studio-6473341422-75630"
   },
   "apiBase": "https://www.bauzagpt.com/api",
-  "payments": {http://www.bauzagpt.com/
+  "payments": "http://www.bauzagpt.com/"
     "createOrder": "/public/orders",
     "getOrders": "/client/orders",
     "createCheckoutSession": "/api/create-checkout-session"
