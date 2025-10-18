@@ -1,6 +1,154 @@
-<!doctype html><meta charset="utf-8">
+
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>BAUZA GPT — OSINT & Pentest</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>body{margin:0;background:#0b1220;color:#e2e8f0;font-family:system-ui}main{max-width:900px;margin:40px auto;padding:24px}h1{font-size:42px;margin:0 0 10px}.card{background:#0f172a;border:1px solid #1f2937;border-radius:16px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35)}</style>
-<main><div class="card"><h1>BAUZA GPT</h1><p>Sitio activo en GitHub Pages. A cobrar, gallo. 🔥</p></div></main>
+<link rel="preconnect" href="https://accounts.google.com">
+<link rel="preconnect" href="https://www.paypal.com">
+<style>
+:root{--bg:#0b1220;--panel:#0f172a;--txt:#e2e8f0;--muted:#94a3b8;--cyan:#22d3ee;--ok:#22c55e;--warn:#f59e0b}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#071018,#0b1220);color:var(--txt);font-family:system-ui,Segoe UI,Roboto}
+.container{max-width:1100px;margin:32px auto;padding:20px}
+.card{background:rgba(15,23,42,.75);border:1px solid #1f2937;border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+h1{font-size:42px;margin:0 0 10px}
+p{color:var(--muted);font-size:18px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:16px}
+.box{padding:16px;border:1px solid #334155;border-radius:14px;background:#0b1220}
+.price{font-size:28px;font-weight:800;margin:6px 0}
+.btn{display:inline-block;padding:12px 16px;border-radius:12px;border:1px solid #164e63;text-decoration:none;color:var(--txt);background:linear-gradient(90deg,#0ea5e9,#22d3ee);font-weight:700}
+.btn-ghost{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid #334155;text-decoration:none;color:var(--txt)}
+.badge{display:inline-block;font-size:12px;padding:4px 8px;border:1px solid #334155;border-radius:999px;color:#cbd5e1}
+.small{font-size:14px;color:#94a3b8}
+hr{border:0;border-top:1px solid #243041;margin:18px 0}
+.center{text-align:center}
+.notice{background:#0b1220;border:1px dashed #334155;border-radius:12px;padding:12px;margin-top:10px}
+</style>
 <script src="/load-config.js" defer></script>
+<script>
+  // ORDER-ID simple para que el cliente lo ponga como "nota" en su pago
+  const ORDER_ID = 'ORDER-' + Math.random().toString(36).slice(2,8).toUpperCase();
+  window.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelectorAll('[data-order]').forEach(el=>el.textContent=ORDER_ID);
+    // Botones PayPal.Me con monto
+    const pay10 = document.getElementById('pay10');
+    const pay20 = document.getElementById('pay20');
+    // PayPal.Me acepta cantidad y nota en la URL; abre en nueva pestaña
+    pay10.href = 'https://www.paypal.com/paypalme/ivanbauza/10mxn?note=' + encodeURIComponent(ORDER_ID);
+    pay20.href = 'https://www.paypal.com/paypalme/ivanbauza/20mxn?note=' + encodeURIComponent(ORDER_ID);
+  });
+
+  // Placeholder Login Google (cuando pongas config real en config.json, activamos esto)
+  function startApp(){
+    console.log('startApp con __CONFIG:', window.__CONFIG);
+    // Aquí inicializarías Firebase con window.__CONFIG.firebase
+  }
+</script>
+</head><body>
+  <div class="container">
+    <div class="card">
+      <h1>BAUZA GPT</h1>
+      <p>OSINT legal y Pentesting ético. <span class="badge">Sitio activo</span></p>
+
+      <div class="grid">
+        <div class="box">
+          <b>Plan Básico</b>
+          <div class="price">$10 MXN</div>
+          <ul class="small">
+            <li>1 búsqueda OSINT (email/teléfono/usuario)</li>
+            <li>Entrega: PDF simple</li>
+          </ul>
+          <a id="pay10" class="btn" target="_blank" rel="noopener">Pagar $10 MXN</a>
+          <div class="notice small">Pon la nota del pago: <b data-order></b></div>
+        </div>
+
+        <div class="box">
+          <b>Plan Pro</b>
+          <div class="price">$20 MXN</div>
+          <ul class="small">
+            <li>3 búsquedas OSINT</li>
+            <li>Entrega: PDF + ZIP con evidencias</li>
+          </ul>
+          <a id="pay20" class="btn" target="_blank" rel="noopener">Pagar $20 MXN</a>
+          <div class="notice small">Pon la nota del pago: <b data-order></b></div>
+        </div>
+
+        <div class="box">
+          <b>¿Cómo funciona?</b>
+          <ol class="small" style="margin-left:16px">
+            <li>Elige plan y paga (PayPal recomendado).</li>
+            <li>Guarda tu <b>ORDER-ID</b> <span class="badge" data-order></span>.</li>
+            <li>Valida el pago en <a class="btn-ghost" href="./pago.html">pago.html</a>.</li>
+            <li>Recibe tu reporte por descarga segura o correo.</li>
+          </ol>
+          <div class="notice small">Sin WhatsApp. Entrega por descarga/Correo.</div>
+        </div>
+      </div>
+
+      <hr/>
+      <div class="center small">© <script>document.write(new Date().getFullYear())</script> BAUZA GPT — Hecho en GDL.</div>
+    </div>
+  </div>
+</body></html>
+HTML
+
+# ===== pago.html (validación manual inmediata) =====
+cat > docs/pago.html <<'HTML'
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Validar pago — BAUZA GPT</title>
+<style>
+:root{--bg:#0b1220;--panel:#0f172a;--txt:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box}body{margin:0;background:#0b1220;color:var(--txt);font-family:system-ui}
+.wrap{max-width:900px;margin:32px auto;padding:20px}
+.card{background:#0f172a;border:1px solid #1f2937;border-radius:16px;padding:20px}
+input,select,button,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #334155;background:#0b1220;color:#e2e8f0}
+label{display:block;margin:10px 0 6px}
+.btn{margin-top:10px;padding:12px 16px;border-radius:12px;border:1px solid #164e63;background:linear-gradient(90deg,#0ea5e9,#22d3ee);color:#fff;font-weight:700}
+.small{font-size:14px;color:#94a3b8}
+</style>
+<script src="/load-config.js" defer></script>
+<script>
+  function startApp(){
+    // Aquí podrías leer window.__CONFIG.payments y enviar a tu backend cuando esté listo.
+    console.log('VALIDACIÓN listo, __CONFIG:', window.__CONFIG);
+  }
+  function generarOrderId(){
+    return 'ORDER-' + Math.random().toString(36).slice(2,8).toUpperCase();
+  }
+  window.addEventListener('DOMContentLoaded', ()=>{
+    const q = new URLSearchParams(location.search);
+    document.getElementById('orderId').value = q.get('oid') || generarOrderId();
+  });
+  function enviarCorreo(){
+    const email = 'bauza723@gmail.com';
+    const plan = document.getElementById('plan').value;
+    const orderId = document.getElementById('orderId').value;
+    const ref = document.getElementById('ref').value;
+    const dato = document.getElementById('dato').value;
+    const cuerpo = encodeURIComponent(
+`Hola BAUZA GPT,
+Confirmo mi pago.
+PLAN: ${plan}
+ORDER-ID: ${orderId}
+REFERENCIA/NOTA: ${ref}
+DATO OSINT: ${dato}
+
+Espero el reporte. Gracias.`
+    );
+    const subj = encodeURIComponent(`[BAUZA GPT] Validación pago ${orderId}`);
+    window.location.href = `mailto:${email}?subject=${subj}&body=${cuerpo}`;
+  }
+</script>
+</head><body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Validar pago</h1>
+      <p class="small">Paso 1: paga en la portada. Paso 2: llena esto y envíalo. Te respondemos con tu descarga o por correo.</p>
+      <label>Plan</label>
+      <select id="plan">
+        <option>Básico $10 MXN</option>
+        <option>Pro $20 MXN</option>
+      </select>
+      <label>ORDER-ID (de la portada o el que pusiste en la nota de pago)</label>
+      <input id="orderId" placeholder="ORDER-XXXXXX"/>
+      <label>Referencia/nota del pago (o captura)</label>
+      <input id="ref" placeholder="p.ej., nota de PayPal, ID trans
