@@ -3,3 +3,7 @@ beautifulsoup4
 pandas
 reportlab
 python-dateutil
+flask
+flask-cors
+gunicorn
+python-dotenv
