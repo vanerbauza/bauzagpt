@@ -1,0 +1,15 @@
+for f in ~/bauzagpt.com/docs/index.html ~/bauzagpt.com/docs/login.html ~/bauzagpt.com/docs/cuenta_ok.html; do
+  [ -f "$f" ] || continue
+  # sólo inserta si no existe ya la referencia
+  if ! grep -q 'load-config.js' "$f"; then
+    # insertar antes de </head>, si no existe lo pone al final
+    if grep -q '</head>' "$f"; then
+      sed -i '/<\/head>/i <script src="/load-config.js" defer></script>' "$f"
+    else
+      echo '<script src="/load-config.js" defer></script>' >> "$f"
+    fi
+    echo "✅ Insertado en $f"
+  else
+    echo "ℹ️ Ya existe la referencia en $f"
+  fi
+done
