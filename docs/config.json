@@ -4,7 +4,7 @@
     "authDomain": "studio-6473341422-75630.firebaseapp.com",
     "projectId": "studio-6473341422-75630"
   },
-  "apiBase": ""1:240684953453:web:6027f3b025c9ee22e8b464",
+  "apiBase": "https://www.bauzagpt.com/api",
   "payments": {http://www.bauzagpt.com/
     "createOrder": "/public/orders",
     "getOrders": "/client/orders",
