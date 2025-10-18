@@ -1,12 +1,13 @@
 {
   "firebase": {
-    "apiKey": "PUBLIC_FIREBASE_APIKEY_EJEMPLO",
-    "authDomain": "tu-proyecto.firebaseapp.com",
-    "projectId": "tu-proyecto-id"
+    "apiKey": "AIzaSyD3a7cv735RQPYsXMdn4KWQ-NDugL7WyfI",
+    "authDomain": "studio-6473341422-75630.firebaseapp.com",
+    "projectId": "studio-6473341422-75630"
   },
-  "payments": {
-    "methodsEndpoint": "/api/admin/methods",
-    "createOrder": "/api/pay/create",
-    "verifyPayment": "/api/pay/verify"
+  "apiBase": "",
+  "payments": {http://www.bauzagpt.com/
+    "createOrder": "/public/orders",
+    "getOrders": "/client/orders",
+    "createCheckoutSession": "/api/create-checkout-session"
   }
 }
