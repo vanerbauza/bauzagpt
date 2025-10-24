@@ -21,8 +21,10 @@
   .wrap{min-height:100%;display:flex;flex-direction:column}
   header{display:flex;gap:12px;align-items:center;justify-content:flex-end;padding:14px 20px}
   header .hello{color:#cbd5e1;font-weight:600}
-  header a{color:#cbd5e1;text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid #334155}
-  header a:hover{background:#1f2937}
+  header a, header button{
+    color:#cbd5e1;text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid #334155;background:transparent;cursor:pointer
+  }
+  header a:hover, header button:hover{background:#1f2937}
 
   .hero{flex:1;display:grid;place-items:center;padding:40px 16px}
   .panel{
@@ -45,7 +47,7 @@
   .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
   .btn{
     appearance:none;border:1px solid #2a2f3a;background:var(--btn);color:#e5e7eb;
-    padding:14px 18px;border-radius:12px;cursor:pointer;font-weight:700;min-width:260px;
+    padding:14px 18px;border-radius:12px;cursor:pointer;font-weight:700;min-width:260px
   }
   .btn:hover{background:var(--btnHover)}
   .btn.primary{background:linear-gradient(90deg,#7c3aed,#2563eb);border-color:#5b21b6}
@@ -60,8 +62,8 @@
   <div class="wrap">
     <header>
       <div class="hello">Hola, <strong id="uname">inicia sesión con Google</strong></div>
-      <a href="#" id="btn-google">Iniciar con Google</a>
-      <a href="#" id="btn-logout">Salir</a>
+      <button id="btn-google" type="button">Iniciar con Google</button>
+      <button id="btn-logout" type="button">Salir</button>
     </header>
 
     <section class="hero">
@@ -90,8 +92,11 @@
     <footer>© <span id="y"></span> BAUZA GPT — OSINT legal en MX</footer>
   </div>
 
-  <!-- ======== JS DEL SITIO (navegación) ======== -->
+  <!-- ====================== SCRIPTS ====================== -->
+
+  <!-- (1) Navegación del sitio -->
   <script>
+    // Año en footer y navegación básica
     document.getElementById('y').textContent = new Date().getFullYear();
     const input = document.getElementById('q');
     document.getElementById('btnSimple').onclick = () => {
@@ -99,20 +104,15 @@
       if (!q) return alert('Escribe un target');
       window.location.href = './resultado.html?q=' + q;
     };
-    document.getElementById('btnPremium').onclick = () => {
-      const q = encodeURIComponent((input.value || '').trim());
-      if (!q) return alert('Escribe un target');
-      window.location.href = './pago.html?q=' + q + '&plan=premium20';
-    };
   </script>
 
-  <!-- ======== LOGIN CON GOOGLE (FIREBASE) ======== -->
+  <!-- (2) Firebase Auth (Google) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut }
       from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-    /* Config real de tu app web (Firebase) */
+    // Config real (tu proyecto)
     const firebaseConfig = {
       apiKey: "AIzaSyD3a7cv735RQPYsXMdn4KWQ-NDugL7WyfI",
       authDomain: "studio-6473341422-75630.firebaseapp.com",
@@ -122,43 +122,22 @@
       appId: "1:240684953453:web:6027f3b025c9ee22e8b464"
     };
 
-    /* Si ya tienes backend Express (Render/Railway), pon aquí tu URL.
-       Si aún no, deja cadena vacía "" y el login funcionará sin JWT propio. */
-    const BACKEND_URL = "";
-
-    // --- Inicializa Firebase ---
     const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const prov = new GoogleAuthProvider();
 
-    // --- UI ---
-    const $ = (s)=>document.querySelector(s);
-    const uname     = $("#uname");
-    const btnLogin  = $("#btn-google");
-    const btnLogout = $("#btn-logout");
+    // Exponer 'auth' para usarlo en el script de Stripe (prefilled_email/client_reference_id)
+    window.auth = auth;
 
-    // Iniciar sesión con Google
+    const uname     = document.querySelector("#uname");
+    const btnLogin  = document.querySelector("#btn-google");
+    const btnLogout = document.querySelector("#btn-logout");
+
     btnLogin?.addEventListener('click', async (e) => {
       e.preventDefault();
       try {
         const { user } = await signInWithPopup(auth, prov);
         uname.textContent = user.displayName || "usuario";
-
-        // Verificar con backend (si definiste BACKEND_URL)
-        if (BACKEND_URL && BACKEND_URL.startsWith("http")) {
-          const idToken = await user.getIdToken();
-          const r = await fetch(`${BACKEND_URL}/auth/verify`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idToken })
-          });
-          const data = await r.json();
-          if (data.ok) {
-            localStorage.setItem("bauza_jwt", data.jwt);
-          } else {
-            console.warn("Backend no emitió JWT:", data);
-          }
-        }
         alert("¡Inicio de sesión correcto!");
       } catch (e) {
         console.error(e);
@@ -166,18 +145,51 @@
       }
     });
 
-    // Cerrar sesión
     btnLogout?.addEventListener('click', async (e) => {
       e.preventDefault();
       await signOut(auth);
-      localStorage.removeItem("bauza_jwt");
       uname.textContent = "inicia sesión con Google";
     });
 
-    // Mantener el nombre si ya hay sesión
     onAuthStateChanged(auth, (user) => {
       if (user) uname.textContent = user.displayName || "usuario";
     });
   </script>
+
+  <!-- (3) Stripe Payment Link (Búsqueda Premium) -->
+  <script type="module">
+    // Payment Link LIVE de Stripe
+    const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/14A4gz7346BF0Pf5So6c000";
+
+    document.getElementById('btnPremium').onclick = async () => {
+      const qEl = document.getElementById('q');
+      const qRaw = qEl ? qEl.value : "";
+      const q = (qRaw || "").trim();
+      if (!q) return alert("Escribe un target de búsqueda");
+
+      // Si el usuario está logueado, prellenamos email y pasamos uid como referencia
+      let email = "", uid = "";
+      try {
+        const user = window.auth?.currentUser;
+        if (user) { email = user.email || ""; uid = user.uid || ""; }
+      } catch (e) {
+        console.warn("No se pudo leer el usuario de Firebase:", e);
+      }
+
+      // Enviar datos a Stripe:
+      // - locale: interfaz en español (LatAm)
+      // - prefilled_email: mejora conversión (si hay)
+      // - client_reference_id: lo recibes en tu webhook (uid o, si no hay login, el target q)
+      const params = new URLSearchParams({
+        locale: "es-419",
+        ...(email ? { prefilled_email: email } : {}),
+        ...(uid ? { client_reference_id: uid } : { client_reference_id: q })
+      });
+
+      window.location.href = `${STRIPE_PAYMENT_LINK}?${params.toString()}`;
+    };
+  </script>
+
+  <!-- ==================== FIN SCRIPTS ==================== -->
 </body>
 </html>
