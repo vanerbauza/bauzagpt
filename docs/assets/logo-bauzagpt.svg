@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="42" viewBox="0 0 180 42">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#60A5FA"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#g)">
+    <path d="M20.5 4l6 10h10l-8.1 6 3 10-10.9-6.5L9.6 30l3-10L4 14h10z"/>
+    <text x="44" y="29" font-family="Segoe UI, Roboto, system-ui" font-size="24" font-weight="900">BauzaGPT</text>
+  </g>
+</svg>

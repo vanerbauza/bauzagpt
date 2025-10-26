@@ -1,251 +1,129 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>BAUZA GPT — Búsqueda Premium</title>
-  <meta name="description" content="Búsqueda OSINT Premium con entrega en PDF/ZIP y enlaces verificados."/>
-  <link rel="icon" href="./img/ojos-vigilantes.gif"/>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root { --bauza:#22c55e; --bg:#0a0f1e; --card:#0f172a; --line:#1f2937 }
-    html,body{height:100%}
-    body{background:radial-gradient(1200px 800px at 50% -10%, rgba(34,197,94,.10), transparent),
-         linear-gradient(180deg, #0a0f1e 0%, #060a14 100%); color:#cbd5e1;
-         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto}
-    .wrap{min-height:100%;display:flex;flex-direction:column}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{width:36px;height:36px;border-radius:10px;overflow:hidden;border:1px solid #1f2937}
-    .matrix {background:linear-gradient(90deg, #16a34a, #a7f3d0); -webkit-background-clip:text; background-clip:text; color:transparent}
-    .panel{width:min(960px,100%);margin-inline:auto}
-    .card{background:rgba(15,23,42,.6);border:1px solid #1f2937;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
-    .inner{padding:22px}
-    .badge{display:inline-block;border:1px solid #334155;border-radius:999px;padding:4px 10px;font-size:12px;color:#9ca3af}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid #2a3342;background:#0b1323;font-weight:700}
-    .btn:hover{outline:1px solid rgba(34,197,94,.35)}
-    .btn-green{ border-color:#14532d; background:linear-gradient(180deg,#052e16,#081b12); color:#d1fae5 }
-    .price{font-size:34px;font-weight:900;color:#a7f3d0}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono"}
-    .link{color:#a7f3d0;text-decoration:underline}
-    .row{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:800px){ .row{grid-template-columns:1fr 1fr} }
-    input, textarea{
-      background:#0b1020;border:1px solid #334155;border-radius:12px;padding:10px 12px;color:#e2e8f0;width:100%
-    }
-    label{font-size:13px;opacity:.9;margin-bottom:6px;display:block}
-    .muted{opacity:.75}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BauzaGPT — No busques lo que no quieres encontrar</title>
+<meta name="description" content="Búsqueda OSINT legal con entrega en PDF y login con Google.">
+<link rel="preconnect" href="https://accounts.google.com">
+<style>
+  :root{
+    --bg1:#0b1220; --bg2:#0a0f1d; --card:#111827; --text:#e5e7eb; --muted:#a3a3a3;
+    --accent1:#c084fc; --accent2:#60a5fa; --btn:#1f2937; --btnHover:#374151;
+    --ring:#8b5cf6;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{
+    margin:0; background:
+      radial-gradient(900px 600px at 50% -10%, #1a1440 0%, var(--bg1) 40%, #060913 100%),
+      linear-gradient(180deg, var(--bg1), var(--bg2));
+    color:var(--text); font:16px/1.5 system-ui,Segoe UI,Roboto,Ubuntu;
+  }
+  .wrap{min-height:100%;display:flex;flex-direction:column}
+  header{display:flex;justify-content:flex-end;gap:16px;padding:16px 24px}
+  header .hello{color:#cbd5e1;font-weight:600}
+  header a{color:#cbd5e1;text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid #334155}
+  header a:hover{background:#1f2937}
+
+  .hero{flex:1;display:grid;place-items:center;padding:40px 16px}
+  .panel{
+    width:min(920px,94vw); background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    border:1px solid #2a2f3a; border-radius:20px; padding:36px; box-shadow:0 20px 50px rgba(0,0,0,.35);
+  }
+  .logo{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:8px}
+  .logo svg{width:34px;height:34px;filter:drop-shadow(0 2px 10px rgba(139,92,246,.45))}
+  .brand{
+    font-weight:900; font-size:40px; letter-spacing:.5px;
+    background:linear-gradient(90deg,var(--accent1),var(--accent2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .tag{color:#c7c7d1;text-align:center;margin:6px 0 26px;font-weight:600;opacity:.9}
+  .group{margin-top:18px;border:1px solid #2f3542;border-radius:16px;padding:22px 18px;background:rgba(17,24,39,.55)}
+  .group h3{margin:0 0 12px;font-size:15px;color:#c7bfff;display:flex;align-items:center;gap:8px}
+  .input{
+    display:flex; align-items:center; gap:12px;
+    background:#0f172a; border:1px solid #2a2f3a; border-radius:12px; padding:10px 12px;
+  }
+  .input input{
+    flex:1; background:transparent; border:0; outline:none; color:var(--text);
+    font-size:16px; padding:10px 6px;
+  }
+  .dot{width:10px;height:10px;border-radius:50%;background:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.25)}
+  .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .btn{
+    appearance:none;border:1px solid #2a2f3a;background:var(--btn);color:#e5e7eb;
+    padding:14px 18px;border-radius:12px;cursor:pointer;font-weight:700;min-width:260px;
+  }
+  .btn:hover{background:var(--btnHover)}
+  .btn.primary{
+    background:linear-gradient(90deg,#7c3aed,#2563eb); border-color:#5b21b6;
+  }
+  .note{margin-top:10px;color:#b6b6c3;font-size:13.5px}
+
+  /* mini badge */
+  .peso{display:inline-flex;align-items:center;gap:8px}
+  .peso span{background:#0b1220;padding:2px 8px;border:1px solid #4338ca;border-radius:999px;font-size:12.5px}
+
+  /* ring focus */
+  .btn:focus,.input:focus-within{outline:2px solid transparent; box-shadow:0 0 0 4px rgba(139,92,246,.35)}
+  footer{padding:14px 18px;color:#94a3b8;text-align:center;font-size:13px}
+</style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <div class="logo"><img src="./img/ojos-vigilantes.gif" alt="BAUZA" class="w-full h-full object-cover"></div>
-      <h1 class="matrix text-xl font-extrabold">BAUZA GPT</h1>
-      <span class="badge mono">Búsqueda Premium</span>
-    </div>
-    <nav class="flex items-center gap-2">
-      <a class="badge" href="./privacidad.html">Privacidad</a>
-      <a class="badge" href="./terminos.html">Términos</a>
-      <button id="btnCfg" class="badge">⚙️ Config</button>
-    </nav>
-  </header>
+  <div class="wrap">
+    <header>
+      <div class="hello">Hola, <strong id="uname">Usuario Demo</strong></div>
+      <a href="#" id="logoutBtn">Salir</a>
+    </header>
 
-  <main class="panel p-4 md:p-6 space-y-4">
-    <!-- STATUS -->
-    <section class="card">
-      <div class="inner text-sm">
-        <span class="text-green-400">●</span> Flujo Premium activo. Crea la orden, paga y descarga tu PDF con enlaces verificados (&lt;400).
-        <span class="mono">v1-front</span>
+    <section class="hero">
+      <div class="panel">
+        <div class="logo">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.5 6h6.5l-5.3 4 2 7L12 15l-6.7 4 2-7L2 8h6.5z"/></svg>
+          <div class="brand">BauzaGPT</div>
+        </div>
+        <p class="tag">NO BUSQUES LO QUE NO QUIERES ENCONTRAR</p>
+
+        <div class="group">
+          <h3>🎯 Target de Búsqueda</h3>
+          <div class="input">
+            <input id="q" placeholder="ejemplo.com, nombre de empresa, email, etc." autocomplete="off"/>
+            <div class="dot"></div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="btnSimple">🔎 Búsqueda Sencilla</button>
+            <button class="btn primary" id="btnPremium">
+              <span class="peso">💲 Búsqueda Premium <span>(20 MXN)</span></span>
+            </button>
+          </div>
+          <div class="note">La búsqueda Premium genera un informe en PDF con todos los resultados.</div>
+        </div>
       </div>
     </section>
 
-    <!-- FORMULARIO PREMIUM -->
-    <section class="card">
-      <div class="inner space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-xl font-extrabold">Plan Premium</h2>
-            <p class="muted">Búsqueda OSINT ampliada (hasta 3 objetos). Entrega en PDF/ZIP con enlaces validados.</p>
-          </div>
-          <div class="text-right">
-            <div class="price">$20 MXN</div>
-            <div class="text-xs muted">Descarga segura + opción por correo.</div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="email">Correo del cliente</label>
-            <input id="email" type="email" placeholder="cliente@correo.com" autocomplete="email" />
-          </div>
-          <div>
-            <label for="target">Target (correo, usuario, teléfono o URL)</label>
-            <input id="target" type="text" placeholder="@usuario | correo@dominio | +52XXXXXXXXXX | https://..." />
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <button id="btnPremium" class="btn btn-green">🔎 Comprar & Generar (Premium)</button>
-          <button id="btnVerify" class="btn" disabled>✅ Ya pagué, verificar</button>
-          <a id="btnDownload" class="btn hidden" href="#" download>⬇️ Descargar PDF</a>
-        </div>
-
-        <div id="msg" class="text-sm muted"></div>
-        <div id="payBox" class="hidden mt-2 p-3 rounded-lg border border-slate-700 bg-slate-900/40"></div>
-      </div>
-    </section>
-
-    <!-- CONFIG -->
-    <section id="cfgSection" class="card hidden">
-      <div class="inner space-y-3">
-        <h3 class="font-bold">Configuración local</h3>
-        <div class="row">
-          <div>
-            <label for="apiBase">URL de tu backend (Render/Railway/Heroku)</label>
-            <input id="apiBase" type="text" placeholder="https://TU-BACKEND.com" />
-          </div>
-          <div>
-            <label>&nbsp;</label>
-            <button id="btnSaveCfg" class="btn">💾 Guardar</button>
-          </div>
-        </div>
-        <p class="text-xs muted">Se guarda en <span class="mono">localStorage.API_BASE</span>. No expongas secretos en el front.</p>
-      </div>
-    </section>
-
-    <!-- AYUDA -->
-    <section class="card">
-      <div class="inner text-xs muted">
-        ¿Dudas? Tras pagar, usa <b>“Ya pagué, verificar”</b>. Cuando el backend marque la orden como <b>ready</b>, aparecerá
-        el botón <b>Descargar PDF</b>. Si pagaste y no cambia, el admin debe llamar a <span class="mono">POST /api/admin/mark-paid</span>.
-      </div>
-    </section>
-  </main>
-
-  <footer class="p-4 text-center text-xs muted">
-    © <span id="year"></span> BAUZA GPT — Hecho con <span class="text-green-400">OSINT</span> en México.
-  </footer>
-</div>
+    <footer>© <span id="y"></span> BAUZA GPT — OSINT legal en MX</footer>
+  </div>
 
 <script>
-(function(){
-  const $ = (q)=>document.querySelector(q);
-  const msg = (t)=> $("#msg").textContent = t || "";
-  const store = {
-    get api(){ return localStorage.getItem("API_BASE") || "" },
-    set api(v){ localStorage.setItem("API_BASE", (v||"").replace(/\/+$/,"")) },
-    saveOrder(o){ localStorage.setItem("BAUZA_LAST_ORDER", JSON.stringify(o||{})) },
-    loadOrder(){ try{ return JSON.parse(localStorage.getItem("BAUZA_LAST_ORDER")||"{}") } catch(e){ return {} } }
+  // Demo de usuario y saludo
+  (function(){
+    const y=document.getElementById('y'); y.textContent=new Date().getFullYear();
+    const saved=localStorage.getItem('bauza_user');
+    if(saved){ try{ document.getElementById('uname').textContent = JSON.parse(saved).name || 'Usuario'; }catch{} }
+    document.getElementById('logoutBtn').addEventListener('click',(e)=>{e.preventDefault(); localStorage.removeItem('bauza_user'); location.reload();});
+  })();
+
+  // Navegación de botones
+  const input = document.getElementById('q');
+  document.getElementById('btnSimple').onclick = () => {
+    const q = encodeURIComponent(input.value.trim());
+    window.location.href = './resultado.html?q=' + q;
   };
-
-  // UI
-  $("#year").textContent = new Date().getFullYear();
-  $("#btnCfg").onclick = ()=> $("#cfgSection").classList.toggle("hidden");
-  $("#btnSaveCfg").onclick = ()=>{
-    const v = $("#apiBase").value.trim();
-    store.api = v;
-    msg("✅ Backend guardado: " + (store.api || "(vacío)"));
+  document.getElementById('btnPremium').onclick = () => {
+    const q = encodeURIComponent(input.value.trim());
+    // flujo premium: te lleva a pago (luego validas manual y rediriges a cuenta_ok)
+    window.location.href = './pago.html?q=' + q + '&plan=premium20';
   };
-  // Precargar campo config
-  $("#apiBase").value = store.api;
-
-  async function api(path, opts={}){
-    const base = store.api;
-    if(!base){ throw new Error("Configura tu backend en ⚙️ Config") }
-    const url = base + path;
-    const res = await fetch(url, { headers:{ "Content-Type":"application/json" }, ...opts });
-    const json = await res.json().catch(()=> ({}));
-    if(!res.ok) throw new Error(json.message || ("Error HTTP "+res.status));
-    return json;
-  }
-
-  function renderPayBox(order){
-    const box = $("#payBox");
-    const methods = order.methods || [];
-    box.innerHTML = `
-      <div class="text-sm">
-        <div><b>Orden:</b> <span class="mono">${order.orderId}</span></div>
-        <div><b>Referencia:</b> <span class="mono">${order.payRef || "-"}</span></div>
-        <div><b>Monto:</b> ${order.amount} ${order.currency}</div>
-      </div>
-      <div class="mt-2">
-        <div class="font-bold mb-1">Métodos de pago:</div>
-        <ul class="list-disc pl-5 space-y-1">
-          ${methods.map(m=> `<li><b>${m.name}:</b> ${m.instructions}</li>`).join("")}
-        </ul>
-      </div>
-    `;
-    box.classList.remove("hidden");
-  }
-
-  // Crear orden Premium
-  $("#btnPremium").onclick = async ()=>{
-    try{
-      msg("");
-      const email = $("#email").value.trim();
-      const target = $("#target").value.trim();
-      if(!email || !email.includes("@")) return msg("⚠️ Ingresa un correo válido.");
-      if(!target) return msg("⚠️ Ingresa el target a investigar.");
-
-      const resp = await api("/api/orders", {
-        method:"POST",
-        body: JSON.stringify({ plan:"premium", email })
-      });
-
-      // Guardamos localmente el target para usarlo en el paso 2 (generación real)
-      const order = {
-        orderId: resp.orderId,
-        orderToken: resp.orderToken,
-        email, plan:"premium",
-        target,
-        amount: resp.amount, currency: resp.currency,
-        payRef: resp.payRef
-      };
-      store.saveOrder(order);
-
-      renderPayBox(resp);
-      $("#btnVerify").disabled = false;
-      $("#btnDownload").classList.add("hidden");
-      msg("🧾 Orden creada. Realiza el pago con alguna opción y luego pulsa “Ya pagué, verificar”.");
-    }catch(e){
-      msg("❌ " + e.message);
-    }
-  };
-
-  // Verificar estado (poll simple)
-  let polling = null;
-  $("#btnVerify").onclick = async ()=>{
-    const ord = store.loadOrder();
-    if(!ord.orderId) return msg("⚠️ Crea primero la orden premium.");
-    msg("⌛ Verificando pago / generación de PDF...");
-    $("#btnVerify").disabled = true;
-
-    const check = async ()=>{
-      try{
-        const st = await api(`/api/orders/${ord.orderId}/status?token=${encodeURIComponent(ord.orderToken||"")}`);
-        if(st.status === "ready"){
-          clearInterval(polling); polling = null;
-          msg("✅ PDF listo. Puedes descargarlo.");
-          const dl = $("#btnDownload");
-          dl.href = `${store.api}/api/orders/${ord.orderId}/download?token=${encodeURIComponent(ord.orderToken||"")}`;
-          dl.classList.remove("hidden");
-          $("#btnVerify").disabled = false;
-        }else{
-          msg(`⌛ Estado: ${st.status}. Seguimos verificando…`);
-        }
-      }catch(e){
-        msg("❌ " + e.message);
-        $("#btnVerify").disabled = false;
-        clearInterval(polling); polling = null;
-      }
-    };
-
-    await check();
-    if(!polling) polling = setInterval(check, 4000);
-  };
-})();
 </script>
 </body>
 </html>
