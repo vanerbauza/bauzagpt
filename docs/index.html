@@ -1,10 +1,10 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>BauzaGPT — No busques lo que no quieres encontrar</title>
-<meta name="description" content="Búsqueda OSINT legal con entrega en PDF y login con Google.">
+<title>BauzaGPT â€” No busques lo que no quieres encontrar</title>
+<meta name="description" content="BÃºsqueda OSINT legal con entrega en PDF y login con Google.">
 <link rel="preconnect" href="https://accounts.google.com">
 <style>
   :root{
@@ -69,7 +69,7 @@
   footer{padding:14px 18px;color:#94a3b8;text-align:center;font-size:13px}
 </style>
 </head>
-<body>
+<body class="eyes-bg body-overlay">
   <div class="wrap">
     <header>
       <div class="hello">Hola, <strong id="uname">Usuario Demo</strong></div>
@@ -85,23 +85,23 @@
         <p class="tag">NO BUSQUES LO QUE NO QUIERES ENCONTRAR</p>
 
         <div class="group">
-          <h3>🎯 Target de Búsqueda</h3>
+          <h3>ðŸŽ¯ Target de BÃºsqueda</h3>
           <div class="input">
             <input id="q" placeholder="ejemplo.com, nombre de empresa, email, etc." autocomplete="off"/>
             <div class="dot"></div>
           </div>
           <div class="actions">
-            <button class="btn" id="btnSimple">🔎 Búsqueda Sencilla</button>
+            <button class="btn" id="btnSimple">ðŸ”Ž BÃºsqueda Sencilla</button>
             <button class="btn primary" id="btnPremium">
-              <span class="peso">💲 Búsqueda Premium <span>(20 MXN)</span></span>
+              <span class="peso">ðŸ’² BÃºsqueda Premium <span>(20 MXN)</span></span>
             </button>
           </div>
-          <div class="note">La búsqueda Premium genera un informe en PDF con todos los resultados.</div>
+          <div class="note">La bÃºsqueda Premium genera un informe en PDF con todos los resultados.</div>
         </div>
       </div>
     </section>
 
-    <footer>© <span id="y"></span> BAUZA GPT — OSINT legal en MX</footer>
+    <footer>Â© <span id="y"></span> BAUZA GPT â€” OSINT legal en MX</footer>
   </div>
 
 <script>
@@ -113,7 +113,7 @@
     document.getElementById('logoutBtn').addEventListener('click',(e)=>{e.preventDefault(); localStorage.removeItem('bauza_user'); location.reload();});
   })();
 
-  // Navegación de botones
+  // NavegaciÃ³n de botones
   const input = document.getElementById('q');
   document.getElementById('btnSimple').onclick = () => {
     const q = encodeURIComponent(input.value.trim());
@@ -127,3 +127,4 @@
 </script>
 </body>
 </html>
+
