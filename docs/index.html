@@ -1,161 +1,231 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="es" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BauzaGPT</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>bauzaGPT</title>
+  <meta name="description" content="Búsqueda OSINT premium con entrega en PDF." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg:#000;
+      --text:#e9e9e9;
+      --muted:#c2c2c2;
+      --brand:#e1463f;          /* rojo del logo y acentos */
+      --brand-2:#b43530;        /* sombra/hover */
+      --chip:#d9d9dc;           /* gris del buscador */
+      --chip-ring:#9a9a9a;
+      --btn-bg:#111218;
+      --btn-ring:#ff6054;
+      --btn-outline:#ff4e44;
+      --shadow-glow: 0 0 24px rgba(255, 51, 51, .45);
     }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #000;
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      display:flex; flex-direction:column; align-items:center;
     }
-    .hero {
-      position: relative;
-      width: 100%;
-      max-width: 1000px;
-      padding: 40px 20px;
-      text-align: center;
+    .wrap{width:100%; max-width:1200px; padding:24px 20px; position:relative}
+    /* Header */
+    .topbar{display:flex; align-items:center; justify-content:space-between}
+    .brand{
+      font-size:clamp(42px, 7vw, 110px);
+      line-height:.9; font-weight:800; letter-spacing:.5px; color:var(--brand);
+      user-select:none;
     }
-    .title {
-      font-size: 72px;
-      font-weight: bold;
-      color: #e63946;
-      margin-bottom: 40px;
+    .google-btn{
+      appearance:none; border:0; padding:14px 20px; border-radius:14px;
+      font-weight:700; background:linear-gradient(180deg, #e34f47, #b83f3a);
+      color:#fff; cursor:pointer; box-shadow:0 6px 20px rgba(227,79,71,.35);
+      transition:transform .08s ease, filter .15s ease;
+      position:fixed; right:24px; top:24px; z-index:10;
     }
-    .login-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background-color: #c1121f;
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 16px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
+    .google-btn:hover{ filter:brightness(1.06) }
+    .google-btn:active{ transform:translateY(1px) }
+
+    /* Hero */
+    .hero{margin: clamp(40px, 8vh, 90px) auto 0; display:grid; place-items:center; position:relative}
+    .search{
+      width:min(860px, 90vw);
+      display:flex; align-items:center; gap:10px;
+      padding:14px 18px; border-radius:999px;
+      background:var(--chip); color:#222;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 0 0 2px rgba(0,0,0,.06);
+      position:relative;
     }
-    .login-btn:hover {
-      background-color: #a5111c;
+    .icon{
+      width:28px; height:28px; display:grid; place-items:center; opacity:.8; flex:0 0 28px;
+      filter: drop-shadow(0 0 0 rgba(0,0,0,0));
     }
-    .search-container {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-      width: 80%;
-      max-width: 600px;
-      height: 56px;
-      background-color: #f4f4f4;
-      border-radius: 28px;
-      overflow: hidden;
+    .input{
+      border:0; outline:0; background:transparent;
+      flex:1; font-size:18px; color:#111;
     }
-    .search-container input {
-      flex: 1;
-      height: 100%;
-      padding: 0 20px;
-      border: none;
-      outline: none;
-      font-size: 18px;
-      color: #333;
-      background-color: transparent;
+    .input::placeholder{ color:#888 }
+    .search:focus-within{
+      outline:3px solid var(--chip-ring);
+      outline-offset:2px;
     }
-    .search-icon,
-    .submit-icon {
-      width: 24px;
-      height: 24px;
-      margin: 0 16px;
-      fill: #666;
-      cursor: pointer;
+
+    .cta{
+      margin-top:22px;
+      background: var(--btn-bg);
+      color:#fff; font-weight:800; font-size:clamp(16px, 2.2vw, 22px); line-height:1.15;
+      padding:18px 28px; border-radius:18px; cursor:pointer;
+      border:2px solid var(--btn-outline);
+      text-align:center; min-width:320px; box-shadow: var(--shadow-glow);
+      transition: transform .08s ease, box-shadow .15s ease, filter .15s ease;
+      position:relative; z-index:2;
     }
-    .premium-btn {
-      margin-top: 30px;
-      display: inline-block;
-      padding: 16px 32px;
-      border: 2px solid #e63946;
-      border-radius: 12px;
-      color: #e63946;
-      font-size: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    .cta:hover{ filter:brightness(1.05); box-shadow:0 0 36px rgba(255, 61, 61, .55) }
+    .cta:active{ transform:translateY(1px) }
+
+    /* Ojos SVG debajo del botón */
+    .eyes{
+      width:min(920px, 94vw); margin-top:10px; pointer-events:none;
+      filter: drop-shadow(0 0 22px rgba(255, 50, 50, .65));
     }
-    .premium-btn:hover {
-      background-color: #e63946;
-      color: #000;
-    }
-    .eyes {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 1000px;
-      height: 300px;
-      background: url("../portada oficial de bauzaGPT.com.png") no-repeat center bottom;
-      background-size: contain;
-      pointer-events: none;
+
+    /* Footer mini (opcional) */
+    .foot{margin: 40px 0 24px; opacity:.45; font-size:13px}
+
+    /* Mobile tweaks */
+    @media (max-width:520px){
+      .google-btn{position:static; margin-left:auto}
+      .topbar{align-items:flex-start}
+      .brand{font-size:54px}
+      .cta{min-width:unset; width:92vw}
     }
   </style>
 </head>
 <body>
-  <div class="hero">
-    <a href="#" class="login-btn" id="loginBtn">Acceso con Google</a>
-    <div class="title">bauzaGPT</div>
-    <div class="search-container">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path
-          d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.28 5.59 12.42 3 9 3S2.72 5.59 2.72 8.39s2.86 5.39 6.28 5.39a6.47 6.47 0 004.54-1.86l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-        />
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">bauzaGPT</div>
+      <button class="google-btn" id="googleBtn" aria-label="Acceso con Google">Acceso con Google</button>
+    </header>
+
+    <main class="hero" role="main">
+      <!-- Caja de búsqueda -->
+      <div class="search" id="searchBox" aria-label="Buscador">
+        <!-- Lupa izquierda -->
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="#5f5f5f" stroke-width="2"/>
+            <path d="M20 20L17 17" stroke="#5f5f5f" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <input class="input" id="query" type="text" placeholder="Search" autocomplete="off" />
+        <!-- Lupa derecha decorativa -->
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="#7b7b7b" stroke-width="2"/>
+            <path d="M20 20L17 17" stroke="#7b7b7b" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- Botón premium -->
+      <button class="cta" id="premiumBtn" aria-label="Búsqueda Premium por 20 MXN">
+        Búsqueda Premium<br/>20 MXN
+      </button>
+
+      <!-- SVG de ojos con glow rojo (100% inline, sin assets externos) -->
+      <svg class="eyes" viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="18" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <linearGradient id="eyeGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff8279"/>
+            <stop offset="60%" stop-color="#ff4e44"/>
+            <stop offset="100%" stop-color="#ff2e2e"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Ojo izquierdo -->
+        <g filter="url(#glow)" transform="translate(110,40)">
+          <path d="M0,120 C90,30 240,0 360,18 C230,85 210,130 240,178 C155,170 70,160 0,120 Z"
+                fill="url(#eyeGrad)" opacity="0.95"/>
+          <circle cx="250" cy="130" r="22" fill="#2a0e0e" opacity=".9"/>
+          <path d="M40,140 C100,115 180,105 265,110" stroke="#7a2020" stroke-width="8" fill="none" opacity=".7"/>
+        </g>
+
+        <!-- Ojo derecho (espejo) -->
+        <g filter="url(#glow)" transform="translate(630,40) scale(-1,1) translate(-360,0)">
+          <path d="M0,120 C90,30 240,0 360,18 C230,85 210,130 240,178 C155,170 70,160 0,120 Z"
+                fill="url(#eyeGrad)" opacity="0.95"/>
+          <circle cx="250" cy="130" r="22" fill="#2a0e0e" opacity=".9"/>
+          <path d="M40,140 C100,115 180,105 265,110" stroke="#7a2020" stroke-width="8" fill="none" opacity=".7"/>
+        </g>
       </svg>
-      <input type="text" id="searchInput" placeholder="Search" autocomplete="off" />
-      <svg
-        class="submit-icon"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        onclick="handleSearch()"
-      >
-        <path
-          d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 001.48-5.34C15.28 5.59 12.42 3 9 3S2.72 5.59 2.72 8.39s2.86 5.39 6.28 5.39a6.47 6.47 0 004.54-1.86l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
-        />
-      </svg>
-    </div>
-    <button class="premium-btn" id="premiumBtn">Búsqueda Premium<br />20&nbsp;MXN</button>
-    <div class="eyes"></div>
+    </main>
+
+    <footer class="foot">
+      © <span id="year"></span> BAUZA GPT — Todos los derechos reservados.
+    </footer>
   </div>
+
+  <noscript>Activa JavaScript para usar bauzaGPT.</noscript>
+
   <script>
-    function loginWithGoogle() {
-      // Sustituye esto por la llamada real de autenticación
-      console.log("Google login triggered");
-      alert("Aquí se iniciaría el proceso de acceso con Google.");
+    // ===== CONFIG =====
+    const CONFIG = {
+      GOOGLE_CLIENT_ID: "TU_CLIENT_ID_DE_GOOGLE",         // <- reemplaza
+      BACKEND_URL: "https://api.tu-backend.com"           // <- reemplaza (Render/Railway/Heroku, etc.)
+    };
+
+    // ===== Helpers UI =====
+    const $ = (sel) => document.querySelector(sel);
+    const yearEl = $("#year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // ===== Auth (conéctalo a tu flujo real) =====
+    function doGoogleLogin() {
+      // Aquí iría tu flujo OAuth o redirección.
+      // Por ahora solo dejamos un punto único de entrada.
+      // Ejemplo temporal:
+      window.location.href = CONFIG.BACKEND_URL + "/auth/google/start";
     }
-    function handleSearch() {
-      const query = document.getElementById("searchInput").value;
-      // Sustituye esto por la llamada real a tu motor de búsqueda
-      console.log(`Search submitted: ${query}`);
-      alert(`Buscando: ${query}`);
+
+    // ===== Búsqueda Premium =====
+    async function startPremiumSearch() {
+      const q = ($("#query").value || "").trim();
+      if (!q) {
+        $("#query").focus();
+        return;
+      }
+      // Idea de orden de compra -> backend genera orden y luego validas pago manualmente
+      // Puedes adaptar a Stripe, depósito, Bitso, etc.
+      try {
+        const res = await fetch(CONFIG.BACKEND_URL + "/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: q, plan: "PRO_20_MXN" })
+        });
+        if (!res.ok) throw new Error("No se pudo crear la orden");
+        const data = await res.json();
+        // Redirige a tu pantalla de instrucciones de pago o al checkout
+        window.location.href = data.next || ("/cuenta_ok.html?orden=" + encodeURIComponent(data.id));
+      } catch (e) {
+        alert("⚠️ Error creando la orden. Revisa BACKEND_URL o la ruta /api/orders.\n\n" + e.message);
+      }
     }
-    function handlePremiumSearch() {
-      // Sustituye esto por la lógica real de pago + búsqueda premium
-      console.log("Premium search button clicked");
-      alert("Se iniciaría el proceso de pago y búsqueda premium por 20 MXN.");
-    }
-    document.getElementById("loginBtn").addEventListener("click", (e) => {
-      e.preventDefault();
-      loginWithGoogle();
+
+    // ===== Eventos =====
+    $("#googleBtn").addEventListener("click", doGoogleLogin);
+    $("#premiumBtn").addEventListener("click", startPremiumSearch);
+    $("#query").addEventListener("keydown", (e)=>{
+      if (e.key === "Enter") startPremiumSearch();
     });
-    document.getElementById("premiumBtn").addEventListener("click", handlePremiumSearch);
   </script>
 </body>
 </html>
