@@ -1,251 +1,336 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>BAUZA GPT — Búsqueda Premium</title>
-  <meta name="description" content="Búsqueda OSINT Premium con entrega en PDF/ZIP y enlaces verificados."/>
-  <link rel="icon" href="./img/ojos-vigilantes.gif"/>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>bauzaGPT</title>
+
+  <!-- No colocar "legal" en el front. Mantener misterio y autoridad. -->
+  <meta name="description" content="Búsqueda OSINT con entrega en PDF — BauzaGPT" />
+
+  <!-- Content Security Policy - ejemplo base. AJUSTA desde tu servidor/Cloudflare a necesidades reales.
+       No incluyas claves en el HTML. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https:; img-src 'self' data:; style-src 'self' 'unsafe-inline';">
+
   <style>
-    :root { --bauza:#22c55e; --bg:#0a0f1e; --card:#0f172a; --line:#1f2937 }
-    html,body{height:100%}
-    body{background:radial-gradient(1200px 800px at 50% -10%, rgba(34,197,94,.10), transparent),
-         linear-gradient(180deg, #0a0f1e 0%, #060a14 100%); color:#cbd5e1;
-         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto}
-    .wrap{min-height:100%;display:flex;flex-direction:column}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--line)}
-    .brand{display:flex;align-items:center;gap:12px}
-    .brand .logo{width:36px;height:36px;border-radius:10px;overflow:hidden;border:1px solid #1f2937}
-    .matrix {background:linear-gradient(90deg, #16a34a, #a7f3d0); -webkit-background-clip:text; background-clip:text; color:transparent}
-    .panel{width:min(960px,100%);margin-inline:auto}
-    .card{background:rgba(15,23,42,.6);border:1px solid #1f2937;border-radius:18px;box-shadow:0 10px 40px rgba(0,0,0,.35)}
-    .inner{padding:22px}
-    .badge{display:inline-block;border:1px solid #334155;border-radius:999px;padding:4px 10px;font-size:12px;color:#9ca3af}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid #2a3342;background:#0b1323;font-weight:700}
-    .btn:hover{outline:1px solid rgba(34,197,94,.35)}
-    .btn-green{ border-color:#14532d; background:linear-gradient(180deg,#052e16,#081b12); color:#d1fae5 }
-    .price{font-size:34px;font-weight:900;color:#a7f3d0}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono"}
-    .link{color:#a7f3d0;text-decoration:underline}
-    .row{display:grid;grid-template-columns:1fr;gap:14px}
-    @media(min-width:800px){ .row{grid-template-columns:1fr 1fr} }
-    input, textarea{
-      background:#0b1020;border:1px solid #334155;border-radius:12px;padding:10px 12px;color:#e2e8f0;width:100%
+    /* Reset minimal */
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    :root{
+      --bg:#060405;
+      --card:#0f0e0f;
+      --muted:#c6c6c6;
+      --accent:#ff3b3b; /* rojo fuerte para acento */
+      --accent-2:#ff6f6f;
+      --glass: rgba(255,255,255,0.03);
     }
-    label{font-size:13px;opacity:.9;margin-bottom:6px;display:block}
-    .muted{opacity:.75}
+
+    body{
+      background: radial-gradient(900px 600px at 50% -10%, #120a15 0%, #070607 40%, #020202 100%);
+      color: #eee;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Contenedor principal */
+    .container{
+      max-width:1200px;
+      margin: 32px auto;
+      padding: 24px;
+      position:relative;
+    }
+
+    /* Header: logo y botón acceso */
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:32px;
+    }
+    .brand{
+      font-size:88px;
+      font-weight:800;
+      letter-spacing: -4px;
+      color: var(--accent);
+      text-shadow: 0 6px 30px rgba(255,59,59,0.12);
+      margin:0;
+    }
+
+    .btn-google{
+      background: linear-gradient(180deg,#b23b3b,#8b2a2a);
+      color:white;
+      padding:12px 20px;
+      border-radius:12px;
+      border:none;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn-google:active{ transform: translateY(1px); box-shadow: 0 3px 8px rgba(0,0,0,0.6); }
+
+    /* Hero - barra de búsqueda y ojos */
+    .hero{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:18px;
+      margin-top:8px;
+    }
+    .search-wrap{
+      position:relative;
+      width:72%;
+      max-width:820px;
+      min-width:320px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .search-input{
+      width:100%;
+      padding:18px 56px;
+      border-radius:28px;
+      border:none;
+      background: linear-gradient(180deg, #ffffff10, #00000010);
+      color:#ddd;
+      font-size:18px;
+      outline:none;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 -2px 8px rgba(255,255,255,0.02);
+    }
+    .search-icon{
+      position:absolute;
+      left:18px;
+      width:28px;
+      height:28px;
+      opacity:0.9;
+      filter: invert(1) brightness(0.85);
+    }
+    .premium-badge{
+      margin-top:12px;
+      background: rgba(10,10,10,0.6);
+      border: 2px solid rgba(255,59,59,0.9);
+      padding:14px 24px;
+      border-radius:12px;
+      font-weight:800;
+      color:var(--accent);
+      box-shadow: 0 18px 60px rgba(255,59,59,0.08);
+      cursor:pointer;
+    }
+
+    /* OJOS VIGILANTES - decorativo */
+    .eyes{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      width:880px;
+      height:320px;
+      top:160px;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:0.9;
+      filter: blur(10px) saturate(1.3);
+    }
+
+    /* Sección pasos - deslizable */
+    .steps{
+      margin-top:420px; /* espacio para hero */
+      padding:48px 24px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(2,2,2,0.95));
+      border-top:1px solid rgba(255,255,255,0.02);
+      border-bottom:1px solid rgba(255,255,255,0.02);
+    }
+    .steps-grid{
+      max-width:1000px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: repeat(3,1fr);
+      gap:28px;
+      align-items:start;
+    }
+    .step{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:18px;
+      text-align:center;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.02);
+    }
+    .step h3{ margin:10px 0 8px; color:var(--accent); }
+    .step p{ color:var(--muted); font-size:14px; line-height:1.3; margin:0 0 12px; }
+    .step img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      border-radius:8px;
+      background: #111;
+      display:block;
+      margin-bottom:12px;
+    }
+    .step .note{ font-size:12px; color:#aaa; }
+
+    /* Footer breve */
+    footer{
+      text-align:center;
+      padding:28px 8px;
+      color:#999;
+      font-size:13px;
+    }
+
+    /* Responsive */
+    @media (max-width:900px){
+      .brand{ font-size:64px }
+      .search-wrap{ width:88% }
+      .eyes{ width:600px; top:120px; height:240px }
+      .steps-grid{ grid-template-columns: 1fr; gap:18px; }
+      .steps{ margin-top:300px; }
+    }
+
+    /* Smooth scroll anchor */
+    html{ scroll-behavior: smooth; }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <div class="logo"><img src="./img/ojos-vigilantes.gif" alt="BAUZA" class="w-full h-full object-cover"></div>
-      <h1 class="matrix text-xl font-extrabold">BAUZA GPT</h1>
-      <span class="badge mono">Búsqueda Premium</span>
-    </div>
-    <nav class="flex items-center gap-2">
-      <a class="badge" href="./privacidad.html">Privacidad</a>
-      <a class="badge" href="./terminos.html">Términos</a>
-      <button id="btnCfg" class="badge">⚙️ Config</button>
-    </nav>
-  </header>
+  <div class="container" role="main">
+    <header>
+      <h1 class="brand" aria-label="Bauza G P T">bauzaGPT</h1>
 
-  <main class="panel p-4 md:p-6 space-y-4">
-    <!-- STATUS -->
-    <section class="card">
-      <div class="inner text-sm">
-        <span class="text-green-400">●</span> Flujo Premium activo. Crea la orden, paga y descarga tu PDF con enlaces verificados (&lt;400).
-        <span class="mono">v1-front</span>
+      <!--
+        BOTÓN DE ACCESO:
+        - Este botón debe abrir el flujo de autenticación REAL en tu backend.
+        - NO pongas client_id ni secrets aquí.
+        - Ideal: abrir POST a /auth/start (backend) que redirige a Google y guarda estado seguro en servidor.
+      -->
+      <button class="btn-google" id="btn-google" aria-label="Acceso con Google">
+        Acceso con Google
+      </button>
+    </header>
+
+    <section class="hero" aria-labelledby="busqueda">
+      <div class="search-wrap" role="search" aria-labelledby="busqueda">
+        <img src="/img/lupa.svg" alt="" class="search-icon" aria-hidden="true" />
+        <input id="input-target" class="search-input" placeholder="Buscar persona, teléfono o usuario" aria-label="Campo de búsqueda" />
+      </div>
+
+      <div class="premium-badge" id="btn-premium" role="button" tabindex="0" aria-pressed="false">
+        Búsqueda Premium — 20 MXN
+      </div>
+
+      <!-- OJOS VIGILANTES: imagen decorativa (usa PNG/GIF que ya tienes). pointer-events none -->
+      <img class="eyes" src="/img/ojos-vigilantes.png" alt="" aria-hidden="true" />
+    </section>
+
+    <!-- SECCIÓN DESLIZABLE: tres pasos. -->
+    <section class="steps" id="como-funciona" aria-label="Cómo funciona">
+      <div style="text-align:center; margin-bottom:18px;">
+        <h2 style="color:var(--accent); margin:0; font-size:28px;">Cómo funciona (3 pasos)</h2>
+        <p style="color:var(--muted); margin-top:6px;">Rápido. Seguro. Resultados en PDF.</p>
+      </div>
+
+      <div class="steps-grid" role="list">
+        <!-- Paso 1 -->
+        <article class="step" role="listitem" aria-labelledby="paso1">
+          <!-- Reemplaza /img/step1.png por la captura real de tu sitio (optimizada) -->
+          <img data-src="/img/step1.png" alt="Acceso con cuenta Google — captura" loading="lazy" />
+          <h3 id="paso1">1. Acceso con Google</h3>
+          <p>Inicia sesión con tu cuenta. El proceso de autenticación se maneja en nuestro servidor — tus credenciales NUNCA se exponen en el navegador.</p>
+          <div class="note">Captura de tu propia página — subir en /img/step1.png</div>
+        </article>
+
+        <!-- Paso 2 -->
+        <article class="step" role="listitem" aria-labelledby="paso2">
+          <img data-src="/img/step2.png" alt="Compra de paquete de créditos — captura" loading="lazy" />
+          <h3 id="paso2">2. Compra de créditos</h3>
+          <p>Compra el paquete que necesites. El pago lo procesamos vía backend seguro (Stripe o método configurado) y tú recibes confirmación y crédito en tu cuenta.</p>
+          <div class="note">Captura de tu pantalla de pago — subir en /img/step2.png</div>
+        </article>
+
+        <!-- Paso 3 -->
+        <article class="step" role="listitem" aria-labelledby="paso3">
+          <img data-src="/img/step3.png" alt="PDF de resultados — captura" loading="lazy" />
+          <h3 id="paso3">3. PDF de resultados</h3>
+          <p>Una vez validado el pago, el sistema genera y entrega un PDF con evidencia y enlaces verificados. Tú decides si descargar o recibir por correo.</p>
+          <div class="note">Captura del PDF generado — subir en /img/step3.png</div>
+        </article>
       </div>
     </section>
 
-    <!-- FORMULARIO PREMIUM -->
-    <section class="card">
-      <div class="inner space-y-4">
-        <div class="flex items-center justify-between">
-          <div>
-            <h2 class="text-xl font-extrabold">Plan Premium</h2>
-            <p class="muted">Búsqueda OSINT ampliada (hasta 3 objetos). Entrega en PDF/ZIP con enlaces validados.</p>
-          </div>
-          <div class="text-right">
-            <div class="price">$20 MXN</div>
-            <div class="text-xs muted">Descarga segura + opción por correo.</div>
-          </div>
-        </div>
+    <footer>
+      <div>© <strong>bauzaGPT</strong> — Protegiendo la verdad y cuidando a los indefensos.</div>
+    </footer>
+  </div>
 
-        <div class="row">
-          <div>
-            <label for="email">Correo del cliente</label>
-            <input id="email" type="email" placeholder="cliente@correo.com" autocomplete="email" />
-          </div>
-          <div>
-            <label for="target">Target (correo, usuario, teléfono o URL)</label>
-            <input id="target" type="text" placeholder="@usuario | correo@dominio | +52XXXXXXXXXX | https://..." />
-          </div>
-        </div>
+  <script>
+    /**
+     * NOTAS IMPORTANTES DE SEGURIDAD (leer y aplicar en backend):
+     * - El frontend nunca debe contener keys/IDs sensibles.
+     * - OAuth: iniciar desde backend (/auth/start) y usar server-side exchange para tokens.
+     * - Pagos: el checkout debe ejecutarse desde backend o usando Stripe Checkout/Payment Links (servidor crea sesión).
+     * - Generación PDF: realizarla en servidor y almacenar/incluir enlaces temporales firmados (presigned URLs).
+     * - Todas las conexiones a APIs externas deben pasar por tu servidor que tenga las variables de entorno.
+     *
+     * En el HTML sólo exponemos endpoints seguros (sin secrets). A continuación el ejemplo de cómo invocar endpoints
+     * que ya debes tener montados en tu backend:
+     *
+     *  - POST /auth/start        -> inicia flujo OAuth (backend guarda state, redirige a Google)
+     *  - POST /purchase/create   -> crea sesión de pago (backend responde con URL de checkout)
+     *  - POST /search/run        -> request para lanzar la búsqueda (backend valida créditos y crea job)
+     *  - GET  /reports/:id       -> descarga segura del PDF (token temporal)
+     *
+     * Asegúrate de CORS restricto y de que connect-src y fetch solo apunten a tus dominios.
+     */
 
-        <div class="flex items-center gap-3">
-          <button id="btnPremium" class="btn btn-green">🔎 Comprar & Generar (Premium)</button>
-          <button id="btnVerify" class="btn" disabled>✅ Ya pagué, verificar</button>
-          <a id="btnDownload" class="btn hidden" href="#" download>⬇️ Descargar PDF</a>
-        </div>
+    // Elementos
+    const btnGoogle = document.getElementById('btn-google');
+    const btnPremium = document.getElementById('btn-premium');
+    const inputTarget = document.getElementById('input-target');
 
-        <div id="msg" class="text-sm muted"></div>
-        <div id="payBox" class="hidden mt-2 p-3 rounded-lg border border-slate-700 bg-slate-900/40"></div>
-      </div>
-    </section>
-
-    <!-- CONFIG -->
-    <section id="cfgSection" class="card hidden">
-      <div class="inner space-y-3">
-        <h3 class="font-bold">Configuración local</h3>
-        <div class="row">
-          <div>
-            <label for="apiBase">URL de tu backend (Render/Railway/Heroku)</label>
-            <input id="apiBase" type="text" placeholder="https://TU-BACKEND.com" />
-          </div>
-          <div>
-            <label>&nbsp;</label>
-            <button id="btnSaveCfg" class="btn">💾 Guardar</button>
-          </div>
-        </div>
-        <p class="text-xs muted">Se guarda en <span class="mono">localStorage.API_BASE</span>. No expongas secretos en el front.</p>
-      </div>
-    </section>
-
-    <!-- AYUDA -->
-    <section class="card">
-      <div class="inner text-xs muted">
-        ¿Dudas? Tras pagar, usa <b>“Ya pagué, verificar”</b>. Cuando el backend marque la orden como <b>ready</b>, aparecerá
-        el botón <b>Descargar PDF</b>. Si pagaste y no cambia, el admin debe llamar a <span class="mono">POST /api/admin/mark-paid</span>.
-      </div>
-    </section>
-  </main>
-
-  <footer class="p-4 text-center text-xs muted">
-    © <span id="year"></span> BAUZA GPT — Hecho con <span class="text-green-400">OSINT</span> en México.
-  </footer>
-</div>
-
-<script>
-(function(){
-  const $ = (q)=>document.querySelector(q);
-  const msg = (t)=> $("#msg").textContent = t || "";
-  const store = {
-    get api(){ return localStorage.getItem("API_BASE") || "" },
-    set api(v){ localStorage.setItem("API_BASE", (v||"").replace(/\/+$/,"")) },
-    saveOrder(o){ localStorage.setItem("BAUZA_LAST_ORDER", JSON.stringify(o||{})) },
-    loadOrder(){ try{ return JSON.parse(localStorage.getItem("BAUZA_LAST_ORDER")||"{}") } catch(e){ return {} } }
-  };
-
-  // UI
-  $("#year").textContent = new Date().getFullYear();
-  $("#btnCfg").onclick = ()=> $("#cfgSection").classList.toggle("hidden");
-  $("#btnSaveCfg").onclick = ()=>{
-    const v = $("#apiBase").value.trim();
-    store.api = v;
-    msg("✅ Backend guardado: " + (store.api || "(vacío)"));
-  };
-  // Precargar campo config
-  $("#apiBase").value = store.api;
-
-  async function api(path, opts={}){
-    const base = store.api;
-    if(!base){ throw new Error("Configura tu backend en ⚙️ Config") }
-    const url = base + path;
-    const res = await fetch(url, { headers:{ "Content-Type":"application/json" }, ...opts });
-    const json = await res.json().catch(()=> ({}));
-    if(!res.ok) throw new Error(json.message || ("Error HTTP "+res.status));
-    return json;
-  }
-
-  function renderPayBox(order){
-    const box = $("#payBox");
-    const methods = order.methods || [];
-    box.innerHTML = `
-      <div class="text-sm">
-        <div><b>Orden:</b> <span class="mono">${order.orderId}</span></div>
-        <div><b>Referencia:</b> <span class="mono">${order.payRef || "-"}</span></div>
-        <div><b>Monto:</b> ${order.amount} ${order.currency}</div>
-      </div>
-      <div class="mt-2">
-        <div class="font-bold mb-1">Métodos de pago:</div>
-        <ul class="list-disc pl-5 space-y-1">
-          ${methods.map(m=> `<li><b>${m.name}:</b> ${m.instructions}</li>`).join("")}
-        </ul>
-      </div>
-    `;
-    box.classList.remove("hidden");
-  }
-
-  // Crear orden Premium
-  $("#btnPremium").onclick = async ()=>{
-    try{
-      msg("");
-      const email = $("#email").value.trim();
-      const target = $("#target").value.trim();
-      if(!email || !email.includes("@")) return msg("⚠️ Ingresa un correo válido.");
-      if(!target) return msg("⚠️ Ingresa el target a investigar.");
-
-      const resp = await api("/api/orders", {
-        method:"POST",
-        body: JSON.stringify({ plan:"premium", email })
-      });
-
-      // Guardamos localmente el target para usarlo en el paso 2 (generación real)
-      const order = {
-        orderId: resp.orderId,
-        orderToken: resp.orderToken,
-        email, plan:"premium",
-        target,
-        amount: resp.amount, currency: resp.currency,
-        payRef: resp.payRef
-      };
-      store.saveOrder(order);
-
-      renderPayBox(resp);
-      $("#btnVerify").disabled = false;
-      $("#btnDownload").classList.add("hidden");
-      msg("🧾 Orden creada. Realiza el pago con alguna opción y luego pulsa “Ya pagué, verificar”.");
-    }catch(e){
-      msg("❌ " + e.message);
-    }
-  };
-
-  // Verificar estado (poll simple)
-  let polling = null;
-  $("#btnVerify").onclick = async ()=>{
-    const ord = store.loadOrder();
-    if(!ord.orderId) return msg("⚠️ Crea primero la orden premium.");
-    msg("⌛ Verificando pago / generación de PDF...");
-    $("#btnVerify").disabled = true;
-
-    const check = async ()=>{
-      try{
-        const st = await api(`/api/orders/${ord.orderId}/status?token=${encodeURIComponent(ord.orderToken||"")}`);
-        if(st.status === "ready"){
-          clearInterval(polling); polling = null;
-          msg("✅ PDF listo. Puedes descargarlo.");
-          const dl = $("#btnDownload");
-          dl.href = `${store.api}/api/orders/${ord.orderId}/download?token=${encodeURIComponent(ord.orderToken||"")}`;
-          dl.classList.remove("hidden");
-          $("#btnVerify").disabled = false;
-        }else{
-          msg(`⌛ Estado: ${st.status}. Seguimos verificando…`);
+    // Event: abrir el flujo de autorización (delegado al backend)
+    btnGoogle.addEventListener('click', async () => {
+      try {
+        // Llamada *segura* al backend que inicia OAuth. NO pongas client_id aquí.
+        // Backend debe devolver redirect URL o redirigir directamente.
+        const res = await fetch('/auth/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include' // cookies seguras si usas sesión server-side
+        });
+        if (res.ok) {
+          // si el backend responde con una URL donde redirigir:
+          const data = await res.json();
+          if (data.redirect) return window.location.href = data.redirect;
+          // si backend hizo redirección, puede responder 204; no hagas nada
+        } else {
+          console.error('Error iniciando autenticación', res.status);
+          alert('No se pudo iniciar sesión. Intenta más tarde.');
         }
-      }catch(e){
-        msg("❌ " + e.message);
-        $("#btnVerify").disabled = false;
-        clearInterval(polling); polling = null;
+      } catch (e) {
+        console.error(e);
+        alert('Error de conexión al servidor.');
       }
-    };
+    });
 
-    await check();
-    if(!polling) polling = setInterval(check, 4000);
-  };
-})();
-</script>
-</body>
-</html>
+    // Event: premium -> abre modal de compra (ejemplo: backend crea sesión de pago)
+    btnPremium.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/purchase/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ sku: 'premium_20mxn' })
+        });
+        const body = await res.json();
+        if (res.ok && body.checkoutUrl) {
+          window.location.href = body.checkoutUrl; // redirect al checkout seguro
+        } else {
+          alert('No se pudo iniciar el proceso de pago.');
+          console.error(body);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Error al conectar con el servidor de pagos.');
+      }
+    });
+
+    // Buscar: ejemplo de cómo lanzar una búsqueda (se
