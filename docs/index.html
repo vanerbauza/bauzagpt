@@ -68,7 +68,32 @@
   .btn:focus,.input:focus-within{outline:2px solid transparent; box-shadow:0 0 0 4px rgba(139,92,246,.35)}
   footer{padding:14px 18px;color:#94a3b8;text-align:center;font-size:13px}
 </style>
-</head>
+<style>
+.eyes-bg::before{
+  content:"";
+  position: fixed; inset: 0;
+  background: url("img/ojos-vigilantes.gif") center / cover no-repeat;
+  opacity:.4; z-index:-1; pointer-events:none;
+}
+.body-overlay{ position:relative; z-index:0; }
+.body-overlay::after{
+  content:""; position:fixed; inset:0;
+  background: radial-gradient(transparent 35%, rgba(0,0,0,.25) 100%);
+  z-index:-1; pointer-events:none;
+}
+@media (max-width:600px){
+  .eyes-bg::before{ background-position:center top; opacity:.45; }
+}
+</style>
+<style>
+html,body{background:#000}
+body{position:relative}
+body::before{
+  content:""; position:fixed; inset:0;
+  background:url("img/ojos-vigilantes.gif") center/cover no-repeat fixed;
+  opacity:.28; z-index:0; pointer-events:none;
+}
+</style></head>
 <body class="eyes-bg body-overlay">
   <div class="wrap">
     <header>
@@ -127,4 +152,9 @@
 </script>
 </body>
 </html>
+
+
+
+
+
 
