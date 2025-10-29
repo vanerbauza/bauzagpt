@@ -1,262 +1,354 @@
-
 <!doctype html>
-<html lang="es-MX">
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>BAUZA GPT — OSINT dorking rápido y verificado</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Búsqueda OSINT  Vista gratis enmascarada y desbloqueo Premium por $20 MXN.">
-  <link rel="icon" href="/docs/favicon.ico">
-  <link rel="stylesheet" href="./estilos.css">
-  <meta property="og:title" content="BAUZA GPT — OSINT ">
-  <meta property="og:description" content="Vista gratis enmascarada. Premium con enlaces verificados y capturas nítidas.">
-  <meta property="og:type" content="website">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BAUZA GPT — OSINT Premium</title>
+  <meta name="description" content="Búsqueda OSINT premium con entrega en PDF. Inicia con Google, paga y recibe tu reporte verificado.">
+  <link rel="preconnect" href="https://accounts.google.com" />
+  <style>
+    :root{
+      --bg:#000; --glass:rgba(10,10,14,.6); --text:#e5e7eb; --muted:#a3a3a3;
+      --accent:#22c55e; /* Verde estilo Matrix */
+      --ring:#16a34a; --danger:#ef4444; --ok:#22c55e;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background: var(--bg);
+      overflow-x:hidden;
+    }
+
+    /* ===== Fondo con OJOS VIGILANTES ===== */
+    .eyes-bg{
+      position:fixed; inset:0; z-index:-2;
+      background:
+        url("./img/ojos-vigilantes.gif") center/cover no-repeat fixed;
+      filter:saturate(1.1) contrast(1.08) brightness(.85);
+    }
+    /* Capa de oscurecimiento/contraste */
+    .overlay::before{
+      content:""; position:fixed; inset:0; z-index:-1;
+      background: radial-gradient(1000px 700px at 50% -10%, rgba(0,0,0,.35), rgba(0,0,0,.85) 65%, #000 100%),
+                  linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.75));
+      pointer-events:none;
+    }
+
+    /* ===== Layout ===== */
+    .container{
+      min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:32px;
+    }
+    .card{
+      width:min(920px, 100%); backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(13,16,22,.75), rgba(7,9,13,.75));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px; padding:28px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.45);
+    }
+    .brand{
+      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;
+    }
+    .logo{
+      font-weight:800; letter-spacing:.5px; line-height:1;
+      display:flex; align-items:center; gap:10px;
+      text-transform:uppercase;
+    }
+    .logo .dot{width:12px; height:12px; border-radius:999px; background:var(--accent); box-shadow:0 0 18px var(--accent);}
+    .subtitle{color:var(--muted); font-size:.95rem}
+
+    .hero{
+      margin-top:6px; display:grid; gap:18px;
+    }
+    .title{
+      font-size:clamp(1.6rem, 2.2vw + 1rem, 2.4rem); font-weight:900; line-height:1.1;
+      text-shadow:0 2px 16px rgba(34,197,94,.25);
+    }
+    .title .accent{color:var(--accent)}
+    .muted{color:var(--muted)}
+
+    .search{
+      display:grid; grid-template-columns: 1fr max-content; gap:10px; margin-top:6px;
+    }
+    .input{
+      width:100%; font-size:1rem; padding:14px 16px; border-radius:14px;
+      color:var(--text); background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1); outline:none;
+    }
+    .input:focus{border-color:var(--ring); box-shadow:0 0 0 4px rgba(34,197,94,.15)}
+    .btn{
+      cursor:pointer; user-select:none; border:none; border-radius:14px;
+      padding:14px 18px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+      background:linear-gradient(180deg, #19c37d, #119d62); color:#031a0f; box-shadow:0 8px 28px rgba(25,195,125,.28);
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+
+    .row{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .pill{font-size:.85rem; color:var(--muted)}
+    .status{display:flex; align-items:center; gap:8px}
+    .dot{
+      width:10px; height:10px; border-radius:999px; background: #555; box-shadow:0 0 0 0 rgba(0,0,0,0);
+    }
+    .ok{background:var(--ok); box-shadow:0 0 12px var(--ok)}
+    .bad{background:var(--danger); box-shadow:0 0 12px var(--danger)}
+
+    /* Modal simple */
+    dialog{
+      border:none; border-radius:18px; padding:0; width:min(520px, 92%);
+      background:linear-gradient(180deg, rgba(18,22,28,.92), rgba(8,10,14,.92));
+      color:var(--text);
+      box-shadow:0 15px 60px rgba(0,0,0,.5);
+    }
+    .modal-head{padding:18px 22px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center}
+    .modal-body{padding:18px 22px; display:grid; gap:12px}
+    .modal-actions{padding:18px 22px; border-top:1px solid rgba(255,255,255,.08); display:flex; gap:10px; justify-content:flex-end}
+    .x{cursor:pointer; background:transparent; color:var(--muted); border:none; font-size:1.2rem}
+    .btn-sec{background:rgba(255,255,255,.06); color:var(--text)}
+    .hint{font-size:.85rem; color:var(--muted)}
+    .kbd{padding:2px 6px; border-radius:8px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); font-size:.85em}
+    small.code{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#a7f3d0}
+
+    /* Mobile tweaks */
+    @media (max-width: 640px){
+      .search{grid-template-columns: 1fr}
+      .btn{width:100%}
+    }
+  </style>
 </head>
-<body>
-  <header class="topbar">
-    <div class="wrap">
-      <a class="brand" href="./">BAUZA <span>GPT</span></a>
-      <nav class="nav">
-        <a href="./docs/servicios.html">Servicios</a>
-        <a href="./docs/faq.html">FAQ</a>
-        <a class="btn ghost" href="./login.html">Entrar</a>
-        <a class="btn primary" href="#gratis">Ver gratis</a>
-      </nav>
-    </div>
-  </header>
+<body class="overlay">
+  <div class="eyes-bg" aria-hidden="true"></div>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero">
-      <div class="wrap">
-        <h1>OSINT dork. Resultados claros.<br><span class="accent">Entrega en PDF y ZIP</span></h1>
-        <p class="sub">Prueba <strong>gratis</strong> (enmascarado). Desbloquea <strong>Premium</strong> por <strong>$20 MXN</strong>.</p>
+  <main class="container">
+    <section class="card" role="region" aria-label="Caja principal">
+      <header class="brand">
+        <div class="logo" aria-label="BAUZA GPT">
+          <span class="dot" aria-hidden="true"></span>
+          <span>BAUZA&nbsp;GPT</span>
+        </div>
+        <div class="status">
+          <span class="pill muted">Backend:</span>
+          <span id="healthDot" class="dot" title="Estado del backend"></span>
+        </div>
+      </header>
 
-        <!-- BUSCADOR -->
-        <form id="searchForm" class="buscador">
-          <input id="q" type="text" placeholder="Ej.: Nombre completo, número de teléfono, @usuario de red social" required>
-          <div class="cta-row" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem">
-            <a class="btn" href="#gratis" id="btnGratisTop">Ver gratis (enmascarado)</a>
-            <!-- BOTÓN PREMIUM ÚNICO -->
-            <a id="btnPremiumTop" class="btn pro" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
+      <section class="hero">
+        <h1 class="title">
+          Búsqueda <span class="accent">OSINT</span> Premium — <span class="accent">PDF</span> verificado
+        </h1>
+        <p class="muted">
+          Ingresa el <b>target</b> (correo, teléfono, usuario, etc.). Inicia sesión con Google, crea tu pedido, realiza el pago y
+          recibirás tu <b>reporte en PDF</b> cuando esté validado. Sin “consulta gratis”.
+        </p>
+
+        <!-- Buscador -->
+        <div class="search" role="search">
+          <input id="targetInput" class="input" type="text" inputmode="latin" autocomplete="off"
+                 placeholder="ej. correo@dominio.com, +52 33 1234 5678, @usuario"
+                 aria-label="Introduce el target para tu búsqueda OSINT">
+          <button id="btnPremium" class="btn" type="button" title="Inicia sesión y crea tu pedido">
+            Búsqueda Premium
+          </button>
+        </div>
+
+        <!-- Row secundaria -->
+        <div class="row">
+          <div class="pill">
+            <span class="kbd">↵ Enter</span> para enviar •
+            <span class="kbd">Login</span> con Google requerido
           </div>
-        </form>
-<!-- === Recibir por WhatsApp (sin backend) === -->
-<form id="whForm" class="mini" style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap">
-  <input id="waPhone" type="tel" placeholder="Tu WhatsApp MX (10 dígitos)" pattern="[0-9]{10}"
-         style="padding:10px;border-radius:8px;border:1px solid #223">
-  <button id="waSend" type="button" class="btn">Recibir por WhatsApp</button>
-</form>
-
-<script>
-(function(){
-  const q = document.getElementById('q');
-  const phone = document.getElementById('waPhone');
-  const send  = document.getElementById('waSend');
-  send?.addEventListener('click', ()=>{
-    const num = (phone.value||'').replace(/\D/g,'');
-    if(num.length!==10){ alert('WhatsApp MX de 10 dígitos'); return; }
-    const email = localStorage.getItem('bg_email')||'';
-    const query = (q && q.value) ? q.value.trim() : '';
-    const msg = encodeURIComponent(Hola, soy \.\nMi consulta: "\".\n¿Me envías el resultado aquí por WhatsApp?);
-    // 52 = México. Ajusta prefijo si usas otro país.
-    location.href = https://wa.me/52\?text=\;
-  });
-})();
-</script>
-
-        <p class="mini"> WhatsApp. Descarga segura desde tu cuenta ocorreo opcional.</p>
-      </div>
-    </section>
-
-    <!-- === VISTA PREVIA GRATIS ENMASCARADA (TEASER) === -->
-    <section id="gratis" class="teaser wrap" style="margin-top:2rem">
-      <h2>Vista previa GRATIS — Pro enmascarado</h2>
-      <p class="mini">Ves TODO el contenido del plan Pro, pero <strong>enmascarado</strong>. Desbloquea por $20 MXN para ver URLs y capturas nítidas.</p>
-
-      <div class="grid2" style="gap:1rem;margin-top:1rem">
-        <div class="card">
-          <h3>Conteos</h3>
-          <ul id="t-counts" class="list"></ul>
+          <div id="gsiMount" aria-live="polite" aria-busy="true"></div>
         </div>
-        <div class="card">
-          <h3>Dominios (enmascarados)</h3>
-          <ul id="t-domains" class="list"></ul>
-        </div>
-      </div>
 
-      <div class="card" style="margin-top:1rem">
-        <h3>Matriz de hallazgos</h3>
-        <div class="table-wrap" style="overflow:auto">
-          <table class="table">
-            <thead>
-              <tr><th>Fuente</th><th>Dato</th><th>Evidencia</th><th>Conf.</th><th>Enlace</th></tr>
-            </thead>
-            <tbody id="t-rows"></tbody>
-          </table>
-        </div>
-        <p class="mini">🔒 En modo gratis, las URLs y miniaturas quedan ocultas.</p>
-      </div>
-
-      <div class="card" style="margin-top:1rem">
-        <h3>Emails / usuarios potenciales</h3>
-        <ul id="t-emails" class="list"></ul>
-      </div>
-
-      <div class="grid3" style="gap:0.75rem;margin-top:1rem">
-        <div class="img blurred">BORROSA</div>
-        <div class="img blurred">BORROSA</div>
-        <div class="img blurred">BORROSA</div>
-        <div class="img blurred">BORROSA</div>
-        <div class="img blurred">BORROSA</div>
-        <div class="img blurred">BORROSA</div>
-      </div>
-
-      <div class="cta-row" style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap">
-        <a class="btn" href="#gratis">Seguir viendo gratis</a>
-        <a id="btnPremium1" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Desbloquear Premium ($20 MXN)</a>
-      </div>
-
-      <p class="mini" style="margin-top:0.5rem">
-        OSINT. La vista previa no incluye URLs ni archivos. Para ver enlaces verificables y capturas nítidas, adquiere el plan Premium.
-      </p>
-    </section>
-    <!-- === /TEASER === -->
-
-    <!-- PLANES (SOLO DOS: GRATIS y PREMIUM) -->
-    <section class="pricing">
-      <div class="wrap grid2">
-        <div class="price-card">
-          <h3>Gratis</h3>
-          <div class="price">$0 <span>MXN</span></div>
-          <ul>
-            <li>Vista enmascarada</li>
-            <li>Conteos y dominios ocultos</li>
-            <li>Sin URLs ni capturas nítidas</li>
-          </ul>
-          <a class="btn" href="#gratis">Ver gratis</a>
-        </div>
-        <div class="price-card highlight">
-          <h3>Premium</h3>
-          <div class="price">$20 <span>MXN</span></div>
-          <ul>
-            <li>Enlaces verificados (HTTP&lt;200)</li>
-            <li>PDF + ZIP con evidencias</li>
-            <li>Prioridad en cola</li>
-          </ul>
-          <a id="btnPremium2" class="btn primary" data-pl href="https://buy.stripe.com/14A4gz7346BF0Pf5So6c000">Pagar Premium</a>
-        </div>
-      </div>
-      <p class="wrap note">Pago por Stripe (tarjeta). Entrega en tu cuenta. Sin WhatsApp.</p>
-    </section>
-
-    <!-- FAQ MINI -->
-    <section class="faq">
-      <div class="wrap">
-        <h2>Preguntas rápidas</h2>
-        <details>
-          <summary>¿Cómo recibo mis resultados?</summary>
-          <p>Desde tu cuenta en bauzagpt.com con token de descarga. Opcionalmente por correo.</p>
-        </details>
-        <details>
-          <summary>¿Usan WhatsApp?</summary>
-          <p>Si.,todo se entrega por el sitio  o whatsapp (y correo opcional).</p>
-        </details>
-        <details>
-          <summary>¿Hacen búsquedas dorking?</summary>
-          <p>si. OSINT dorking, público o con tu autorización expresa.</p>
-        </details>
-      </div>
+        <p id="msg" class="muted" style="margin-top:6px" aria-live="polite"></p>
+      </section>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap footer-flex">
-      <div>
-        <strong>BAUZA GPT</strong><br>
-        OSINT  con entrega verificada.
-      </div>
-      <div>
-        <a href="./contacto.html">Contacto</a> ·
-        <a href="./privacidad.html">Privacidad</a> ·
-        <a href="./terminos.html">Términos</a>
-      </div>
+  <!-- Modal de confirmación -->
+  <dialog id="confirmDlg">
+    <div class="modal-head">
+      <strong>Confirmar Búsqueda</strong>
+      <button class="x" type="button" onclick="closeDlg()">✕</button>
     </div>
-  </footer>
+    <div class="modal-body">
+      <div>Vas a crear un pedido para el target:</div>
+      <div><small class="code" id="confirmTarget"></small></div>
+      <div class="hint">
+        Tras crear el pedido, verás el estatus <b>Pendiente de pago</b>. Los métodos de pago se muestran
+        después (desde el backend) y la validación es manual por el admin. Al validarse, podrás descargar tu PDF.
+      </div>
+      <div id="dlgMsg" class="hint"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-sec" type="button" onclick="closeDlg()">Cancelar</button>
+      <button class="btn" id="confirmGo" type="button">Crear pedido</button>
+    </div>
+  </dialog>
 
-  <!-- ====== ÚNICO SCRIPT: guardar consulta antes de ir a Stripe ====== -->
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <script>
-    (function () {
-      function saveQuery() {
-        try {
-          var el = document.getElementById('q');
-          var q = el && el.value ? el.value.trim() : '';
-          if (q) localStorage.setItem('bg_last_query', q);
-        } catch (e) {}
-      }
-      var links = document.querySelectorAll('a[data-pl]');
-      links.forEach(function(a){ a.addEventListener('click', saveQuery); });
-    })();
-  </script>
+    // ======= CONFIGURA ESTOS VALORES =======
+    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
+    const BACKEND_URL      = "https://YOUR_BACKEND_URL"; // sin '/' al final
+    // =======================================
 
-  <!-- (opcional) tu app.js si lo usas -->
-  <script src="./app.js"></script>
-<script>
-(function(){
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
-  }
-  if (window.caches) {
-    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-  }
-})();
-</script>
-<!-- === Login con Google (Firebase) === -->
-<button id="btnGoogle" class="btn" style="display:none">Acceder con Google</button>
-<button id="btnSalir"  class="btn" style="display:none">Salir</button>
-<span id="userInfo" class="mini" style="margin-left:.5rem"></span>
+    const $ = sel => document.querySelector(sel);
+    const msg = (t, type="info") => { 
+      const el = $("#msg"); 
+      el.textContent = t || ""; 
+      el.style.color = type === "error" ? "#fca5a5" : type === "ok" ? "#86efac" : "var(--muted)";
+    };
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+    let idToken = null;      // JWT de Google (credential)
+    let userInfo = null;     // datos básicos decodificados del JWT (no verificados)
+    let healthOk = false;
 
-  // TODO: Pega tu configuración real de Firebase:
-  const firebaseConfig = {
-    apiKey: "TU_API_KEY",
-    authDomain: "TU_PROJECT_ID.firebaseapp.com",
-    projectId: "TU_PROJECT_ID",
-    appId: "TU_APP_ID"
-  };
-
-  const app   = initializeApp(firebaseConfig);
-  const auth  = getAuth(app);
-  const prov  = new GoogleAuthProvider();
-  const $     = (s)=>document.querySelector(s);
-  const gBtn  = #btnGoogle;
-  const oBtn  = #btnSalir;
-  const uInfo = #userInfo;
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      gBtn.style.display="none"; oBtn.style.display="inline-block";
-      uInfo.textContent = Hola, \;
-      localStorage.setItem("bg_email", user.email||"");
-    } else {
-      gBtn.style.display="inline-block"; oBtn.style.display="none";
-      uInfo.textContent = ""; localStorage.removeItem("bg_email");
+    // Decodifica el JWT (solo para mostrar nombre/email; validación real la hace tu backend)
+    function decodeJWT(token){
+      try{
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      }catch(e){ return null; }
     }
-  });
 
-  gBtn?.addEventListener("click", async ()=>{ try{ await signInWithPopup(auth, prov); }catch(e){ alert("No se pudo iniciar sesión: "+e.message); }});
-  oBtn?.addEventListener("click", async ()=>{ await signOut(auth); });
-</script>
+    // Renderiza el botón de Google en #gsiMount
+    function renderGSI(){
+      if(!window.google || !google.accounts || !google.accounts.id){ return; }
+      try{
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response) => {
+            idToken = response.credential;
+            userInfo = decodeJWT(idToken) || {};
+            msg(`Sesión iniciada: ${userInfo?.email || "usuario Google"}`, "ok");
+          }
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("gsiMount"),
+          { theme: "outline", size: "large", text: "signin_with", shape: "pill", logo_alignment: "left" }
+        );
+        google.accounts.id.prompt(); // One Tap si aplica
+        document.getElementById("gsiMount").setAttribute("aria-busy", "false");
+      }catch(err){
+        console.error(err);
+        msg("No se pudo inicializar el login de Google (revisa tu CLIENT_ID).", "error");
+      }
+    }
+
+    // Health-check del backend
+    async function checkHealth(){
+      const dot = $("#healthDot");
+      try{
+        const res = await fetch(BACKEND_URL + "/health", { method:"GET" });
+        healthOk = res.ok;
+        dot.classList.toggle("ok", res.ok);
+        dot.classList.toggle("bad", !res.ok);
+      }catch{
+        healthOk = false;
+        dot.classList.remove("ok"); dot.classList.add("bad");
+      }
+    }
+
+    // Abrir/cerrar modal
+    function openDlg(target){
+      $("#confirmTarget").textContent = target;
+      $("#dlgMsg").textContent = "";
+      $("#confirmDlg").showModal();
+    }
+    function closeDlg(){ $("#confirmDlg").close(); }
+
+    // Crear pedido en backend
+    async function createOrder(target){
+      const hdrs = {
+        "Content-Type":"application/json",
+        ...(idToken ? {"Authorization": "Bearer " + idToken} : {})
+      };
+      try{
+        const res = await fetch(BACKEND_URL + "/api/orders", {
+          method:"POST",
+          headers: hdrs,
+          body: JSON.stringify({ target })
+        });
+        const data = await res.json().catch(()=> ({}));
+        if(!res.ok){
+          throw new Error(data?.message || "Error creando el pedido.");
+        }
+        return data; // { orderId, status, next: "/panel/pedido/..." }
+      }catch(err){
+        throw err;
+      }
+    }
+
+    // Validación simple de target (rápida, flexible)
+    function sanitizeTarget(t){
+      return (t || "").trim().replace(/\s{2,}/g, " ");
+    }
+
+    // Flujo principal del botón "Búsqueda Premium"
+    async function onPremium(){
+      const raw = $("#targetInput").value;
+      const target = sanitizeTarget(raw);
+      if(!target){
+        msg("Escribe un target válido para continuar.", "error");
+        $("#targetInput").focus();
+        return;
+      }
+      if(!idToken){
+        msg("Primero inicia sesión con tu cuenta de Google.", "error");
+        // Forzamos prompt de Google si aún no se ha iniciado
+        if(window.google?.accounts?.id){ google.accounts.id.prompt(); }
+        return;
+      }
+      openDlg(target);
+      $("#confirmGo").onclick = async () => {
+        $("#confirmGo").disabled = true;
+        $("#dlgMsg").textContent = "Creando pedido…";
+        try{
+          const data = await createOrder(target);
+          $("#dlgMsg").textContent = "Pedido creado: " + (data?.orderId || "OK") + " • Estado: " + (data?.status || "pendiente");
+          msg("Pedido creado. Revisa tu panel para ver métodos de pago y estatus.", "ok");
+          setTimeout(()=> {
+            closeDlg();
+            if(data?.next){ location.href = data.next; }
+          }, 900);
+        }catch(err){
+          console.error(err);
+          $("#dlgMsg").textContent = "Error: " + err.message;
+          msg("No se pudo crear el pedido. Revisa el backend y tu sesión.", "error");
+        }finally{
+          $("#confirmGo").disabled = false;
+        }
+      };
+    }
+
+    // Eventos
+    window.addEventListener("DOMContentLoaded", () => {
+      // Renderiza botón de Google cuando el script cargue
+      const gsiReady = () => renderGSI();
+      if(document.readyState === "complete"){ gsiReady(); }
+      else { window.addEventListener("load", gsiReady, { once:true }); }
+
+      // Health check
+      checkHealth();
+      // cada 20s reintenta (opcional)
+      setInterval(checkHealth, 20000);
+
+      // Enter = premium
+      $("#targetInput").addEventListener("keydown", e => {
+        if(e.key === "Enter"){ onPremium(); }
+      });
+      $("#btnPremium").addEventListener("click", onPremium);
+    });
+  </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
