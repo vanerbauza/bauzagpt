@@ -1,354 +1,183 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BAUZA GPT — OSINT Premium</title>
-  <meta name="description" content="Búsqueda OSINT premium con entrega en PDF. Inicia con Google, paga y recibe tu reporte verificado.">
-  <link rel="preconnect" href="https://accounts.google.com" />
-  <style>
-    :root{
-      --bg:#000; --glass:rgba(10,10,14,.6); --text:#e5e7eb; --muted:#a3a3a3;
-      --accent:#22c55e; /* Verde estilo Matrix */
-      --ring:#16a34a; --danger:#ef4444; --ok:#22c55e;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      background: var(--bg);
-      overflow-x:hidden;
-    }
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BAUZA GPT — Búsqueda OSINT Premium</title>
+<meta name="description" content="Búsqueda OSINT con entrega en PDF + ZIP. Acceso con Google y créditos por consulta.">
+<link rel="preconnect" href="https://accounts.google.com">
+<style>
+  :root{
+    --bg:#000; --text:#e5e7eb; --muted:#a3a3a3; --card:#0b0f14;
+    --accent:#00ff95; --accent2:#00d870; --ring:#00ff95;
+  }
+  *{box-sizing:border-box} html,body{height:100%}
+  body{
+    margin:0; background: #000; color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    line-height:1.45; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  }
+  /* Fondo ojos vigilantes */
+  .eyes-bg{
+    position:fixed; inset:0; z-index:-2;
+    background: #000 url("./img/ojos-vigilantes.gif") center/cover no-repeat fixed;
+    filter: contrast(1.05) brightness(0.8);
+  }
+  /* Capa de grano/niebla */
+  .grain{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.12;
+    background-image: repeating-linear-gradient(0deg, #0f0 0 1px, transparent 1px 2px);
+    mix-blend-mode: screen;
+    animation: pulse 6s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity:.18 } }
 
-    /* ===== Fondo con OJOS VIGILANTES ===== */
-    .eyes-bg{
-      position:fixed; inset:0; z-index:-2;
-      background:
-        url("./img/ojos-vigilantes.gif") center/cover no-repeat fixed;
-      filter:saturate(1.1) contrast(1.08) brightness(.85);
-    }
-    /* Capa de oscurecimiento/contraste */
-    .overlay::before{
-      content:""; position:fixed; inset:0; z-index:-1;
-      background: radial-gradient(1000px 700px at 50% -10%, rgba(0,0,0,.35), rgba(0,0,0,.85) 65%, #000 100%),
-                  linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.75));
-      pointer-events:none;
-    }
+  /* Layout */
+  .container{max-width:1100px; margin:0 auto; padding:24px}
+  .hero{
+    min-height:72vh; display:flex; align-items:center; justify-content:center; text-align:center;
+  }
+  .card{
+    background: rgba(11,15,20,.78); border:1px solid #0f1a12; border-radius:18px; padding:32px 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.45), inset 0 0 60px rgba(0,255,149,.06);
+    backdrop-filter: blur(4px);
+  }
+  .logo{
+    font-weight:800; font-size: clamp(36px, 7vw, 64px);
+    letter-spacing:.04em; margin:0 0 8px;
+    background: linear-gradient(180deg, #00ff95, #00b86a);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 18px rgba(0,255,149,.25);
+  }
+  .tag{ color:var(--muted); margin:0 0 18px; font-size:clamp(14px,2.4vw,16px) }
 
-    /* ===== Layout ===== */
-    .container{
-      min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:32px;
-    }
-    .card{
-      width:min(920px, 100%); backdrop-filter: blur(8px);
-      background: linear-gradient(180deg, rgba(13,16,22,.75), rgba(7,9,13,.75));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:24px; padding:28px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.45);
-    }
-    .brand{
-      display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px;
-    }
-    .logo{
-      font-weight:800; letter-spacing:.5px; line-height:1;
-      display:flex; align-items:center; gap:10px;
-      text-transform:uppercase;
-    }
-    .logo .dot{width:12px; height:12px; border-radius:999px; background:var(--accent); box-shadow:0 0 18px var(--accent);}
-    .subtitle{color:var(--muted); font-size:.95rem}
+  .actions{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px }
+  .btn{
+    border:1px solid #0e1b14; background:#0b1116; color:var(--text);
+    padding:12px 16px; border-radius:12px; cursor:pointer; font-weight:600;
+    transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .btn:hover{ transform: translateY(-1px); box-shadow:0 8px 24px rgba(0,255,149,.12); border-color:#123824 }
+  .btn-primary{ border-color:#0f3; box-shadow: inset 0 0 20px rgba(0,255,149,.08) }
 
-    .hero{
-      margin-top:6px; display:grid; gap:18px;
-    }
-    .title{
-      font-size:clamp(1.6rem, 2.2vw + 1rem, 2.4rem); font-weight:900; line-height:1.1;
-      text-shadow:0 2px 16px rgba(34,197,94,.25);
-    }
-    .title .accent{color:var(--accent)}
-    .muted{color:var(--muted)}
+  /* Sección pasos */
+  .steps{ padding: 24px 0 64px }
+  .steps h2{ text-align:center; margin: 0 0 18px; font-size: clamp(22px, 4vw, 28px) }
+  .steps p.lead{ text-align:center; color:var(--muted); margin: 0 0 28px }
 
-    .search{
-      display:grid; grid-template-columns: 1fr max-content; gap:10px; margin-top:6px;
-    }
-    .input{
-      width:100%; font-size:1rem; padding:14px 16px; border-radius:14px;
-      color:var(--text); background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.1); outline:none;
-    }
-    .input:focus{border-color:var(--ring); box-shadow:0 0 0 4px rgba(34,197,94,.15)}
-    .btn{
-      cursor:pointer; user-select:none; border:none; border-radius:14px;
-      padding:14px 18px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
-      background:linear-gradient(180deg, #19c37d, #119d62); color:#031a0f; box-shadow:0 8px 28px rgba(25,195,125,.28);
-    }
-    .btn:active{transform:translateY(1px)}
-    .btn:disabled{opacity:.6; cursor:not-allowed}
+  .grid{
+    display:grid; gap:16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+  }
+  .step{
+    background: rgba(11,15,20,.78); border:1px solid #0f1a12; border-radius:16px; overflow:hidden;
+    box-shadow: 0 6px 26px rgba(0,0,0,.35), inset 0 0 40px rgba(0,255,149,.04);
+  }
+  .step img{ width:100%; display:block; aspect-ratio: 16/10; object-fit: cover; }
+  .step .content{ padding:14px 14px 16px }
+  .step h3{ margin:0 0 6px; font-size:18px }
+  .step p{ margin:0; color:var(--muted); font-size:14px }
 
-    .row{
-      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-      margin-top:8px;
-    }
-    .pill{font-size:.85rem; color:var(--muted)}
-    .status{display:flex; align-items:center; gap:8px}
-    .dot{
-      width:10px; height:10px; border-radius:999px; background: #555; box-shadow:0 0 0 0 rgba(0,0,0,0);
-    }
-    .ok{background:var(--ok); box-shadow:0 0 12px var(--ok)}
-    .bad{background:var(--danger); box-shadow:0 0 12px var(--danger)}
+  .footer{ text-align:center; color:#7b7b7b; font-size:13px; padding:20px 0 40px }
+  a.link{ color:#72f3b3; text-decoration:none; border-bottom:1px dashed rgba(0,255,149,.35) }
+  a.link:hover{ border-bottom-style: solid }
 
-    /* Modal simple */
-    dialog{
-      border:none; border-radius:18px; padding:0; width:min(520px, 92%);
-      background:linear-gradient(180deg, rgba(18,22,28,.92), rgba(8,10,14,.92));
-      color:var(--text);
-      box-shadow:0 15px 60px rgba(0,0,0,.5);
-    }
-    .modal-head{padding:18px 22px; border-bottom:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center}
-    .modal-body{padding:18px 22px; display:grid; gap:12px}
-    .modal-actions{padding:18px 22px; border-top:1px solid rgba(255,255,255,.08); display:flex; gap:10px; justify-content:flex-end}
-    .x{cursor:pointer; background:transparent; color:var(--muted); border:none; font-size:1.2rem}
-    .btn-sec{background:rgba(255,255,255,.06); color:var(--text)}
-    .hint{font-size:.85rem; color:var(--muted)}
-    .kbd{padding:2px 6px; border-radius:8px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); font-size:.85em}
-    small.code{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color:#a7f3d0}
-
-    /* Mobile tweaks */
-    @media (max-width: 640px){
-      .search{grid-template-columns: 1fr}
-      .btn{width:100%}
-    }
-  </style>
+  /* Responsive tune */
+  @media (min-width: 920px){
+    .card{ padding:42px 38px }
+  }
+</style>
 </head>
-<body class="overlay">
+<body>
   <div class="eyes-bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <main class="container">
-    <section class="card" role="region" aria-label="Caja principal">
-      <header class="brand">
-        <div class="logo" aria-label="BAUZA GPT">
-          <span class="dot" aria-hidden="true"></span>
-          <span>BAUZA&nbsp;GPT</span>
-        </div>
-        <div class="status">
-          <span class="pill muted">Backend:</span>
-          <span id="healthDot" class="dot" title="Estado del backend"></span>
-        </div>
-      </header>
+  <header class="container" style="padding-top:18px">
+    <nav style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+      <div style="font-weight:800; letter-spacing:.08em; color:#9bf6cf">BAUZA GPT</div>
+      <div class="actions">
+        <button class="btn" id="verDemoBtn">Ver PDF de ejemplo</button>
+        <a class="btn" href="./privacidad.html">Privacidad</a>
+        <a class="btn" href="./terminos.html">Términos</a>
+      </div>
+    </nav>
+  </header>
 
-      <section class="hero">
-        <h1 class="title">
-          Búsqueda <span class="accent">OSINT</span> Premium — <span class="accent">PDF</span> verificado
-        </h1>
-        <p class="muted">
-          Ingresa el <b>target</b> (correo, teléfono, usuario, etc.). Inicia sesión con Google, crea tu pedido, realiza el pago y
-          recibirás tu <b>reporte en PDF</b> cuando esté validado. Sin “consulta gratis”.
-        </p>
-
-        <!-- Buscador -->
-        <div class="search" role="search">
-          <input id="targetInput" class="input" type="text" inputmode="latin" autocomplete="off"
-                 placeholder="ej. correo@dominio.com, +52 33 1234 5678, @usuario"
-                 aria-label="Introduce el target para tu búsqueda OSINT">
-          <button id="btnPremium" class="btn" type="button" title="Inicia sesión y crea tu pedido">
-            Búsqueda Premium
-          </button>
-        </div>
-
-        <!-- Row secundaria -->
-        <div class="row">
-          <div class="pill">
-            <span class="kbd">↵ Enter</span> para enviar •
-            <span class="kbd">Login</span> con Google requerido
-          </div>
-          <div id="gsiMount" aria-live="polite" aria-busy="true"></div>
-        </div>
-
-        <p id="msg" class="muted" style="margin-top:6px" aria-live="polite"></p>
-      </section>
+  <main class="container hero">
+    <section class="card" style="max-width:960px">
+      <h1 class="logo">BAUZA GPT</h1>
+      <p class="tag">OSINT de alto impacto con entrega en <strong>PDF + ZIP</strong>. Inicia con Google y paga créditos por búsqueda. Resultados verificados y listos para descargar.</p>
+      <div class="actions">
+        <button class="btn btn-primary" id="googleLoginBtn">Entrar con Google</button>
+        <button class="btn" id="premiumSearchBtn">Búsqueda Premium</button>
+      </div>
     </section>
   </main>
 
-  <!-- Modal de confirmación -->
-  <dialog id="confirmDlg">
-    <div class="modal-head">
-      <strong>Confirmar Búsqueda</strong>
-      <button class="x" type="button" onclick="closeDlg()">✕</button>
+  <section class="container steps" id="como-funciona">
+    <h2>¿Cómo funciona?</h2>
+    <p class="lead">Tres pasos y listo. Tú controlas la búsqueda; nosotros armamos el informe.</p>
+
+    <div class="grid">
+      <article class="step">
+        <img src="./img/paso1.png" alt="Paso 1 — Iniciar sesión con Google">
+        <div class="content">
+          <h3>1) Inicia con Google</h3>
+          <p>Un clic en “Entrar con Google” y quedas registrado en tu cuenta.</p>
+        </div>
+      </article>
+      <article class="step">
+        <img src="./img/paso2.png" alt="Paso 2 — Comprar créditos">
+        <div class="content">
+          <h3>2) Compra créditos</h3>
+          <p>Elige <strong>Básico ($10 MXN)</strong> o <strong>Pro ($20 MXN)</strong>. Se activan en tu cuenta.</p>
+        </div>
+      </article>
+      <article class="step">
+        <img src="./img/paso3.png" alt="Paso 3 — Recibir PDF + ZIP">
+        <div class="content">
+          <h3>3) Recibe tu informe</h3>
+          <p>Generamos tu <strong>PDF + ZIP</strong> con links verificados y token de descarga segura.</p>
+        </div>
+      </article>
     </div>
-    <div class="modal-body">
-      <div>Vas a crear un pedido para el target:</div>
-      <div><small class="code" id="confirmTarget"></small></div>
-      <div class="hint">
-        Tras crear el pedido, verás el estatus <b>Pendiente de pago</b>. Los métodos de pago se muestran
-        después (desde el backend) y la validación es manual por el admin. Al validarse, podrás descargar tu PDF.
-      </div>
-      <div id="dlgMsg" class="hint"></div>
+
+    <div style="text-align:center; margin-top:22px">
+      <a class="btn" href="./gracias.html">Ver flujo de confirmación</a>
     </div>
-    <div class="modal-actions">
-      <button class="btn-sec" type="button" onclick="closeDlg()">Cancelar</button>
-      <button class="btn" id="confirmGo" type="button">Crear pedido</button>
-    </div>
-  </dialog>
+  </section>
 
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <footer class="container footer">
+    © <span id="year"></span> BAUZA GPT · Hecho con disciplina y 🔥
+  </footer>
 
-  <script>
-    // ======= CONFIGURA ESTOS VALORES =======
-    const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
-    const BACKEND_URL      = "https://YOUR_BACKEND_URL"; // sin '/' al final
-    // =======================================
+<script>
+  // 👉 Ajusta estos valores cuando conectes tu backend real
+  const BACKEND_URL = "https://TU_BACKEND_RENDER_O_RAILWAY.app";
+  const GOOGLE_CLIENT_ID = "TU_GOOGLE_CLIENT_ID";
 
-    const $ = sel => document.querySelector(sel);
-    const msg = (t, type="info") => { 
-      const el = $("#msg"); 
-      el.textContent = t || ""; 
-      el.style.color = type === "error" ? "#fca5a5" : type === "ok" ? "#86efac" : "var(--muted)";
-    };
+  // Botones
+  const loginBtn = document.getElementById('googleLoginBtn');
+  const premiumBtn = document.getElementById('premiumSearchBtn');
+  const demoBtn = document.getElementById('verDemoBtn');
 
-    let idToken = null;      // JWT de Google (credential)
-    let userInfo = null;     // datos básicos decodificados del JWT (no verificados)
-    let healthOk = false;
+  loginBtn?.addEventListener('click', () => {
+    // Placeholder: redirige a tu endpoint de login
+    window.location.href = BACKEND_URL + "/auth/google/start";
+  });
 
-    // Decodifica el JWT (solo para mostrar nombre/email; validación real la hace tu backend)
-    function decodeJWT(token){
-      try{
-        const base64Url = token.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
-        return JSON.parse(jsonPayload);
-      }catch(e){ return null; }
-    }
+  premiumBtn?.addEventListener('click', () => {
+    // Placeholder: si no hay sesión, mandar a login; si sí, ir a crear orden
+    // Ajusta la ruta a tu backend real
+    window.location.href = BACKEND_URL + "/orders/create";
+  });
 
-    // Renderiza el botón de Google en #gsiMount
-    function renderGSI(){
-      if(!window.google || !google.accounts || !google.accounts.id){ return; }
-      try{
-        google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: (response) => {
-            idToken = response.credential;
-            userInfo = decodeJWT(idToken) || {};
-            msg(`Sesión iniciada: ${userInfo?.email || "usuario Google"}`, "ok");
-          }
-        });
-        google.accounts.id.renderButton(
-          document.getElementById("gsiMount"),
-          { theme: "outline", size: "large", text: "signin_with", shape: "pill", logo_alignment: "left" }
-        );
-        google.accounts.id.prompt(); // One Tap si aplica
-        document.getElementById("gsiMount").setAttribute("aria-busy", "false");
-      }catch(err){
-        console.error(err);
-        msg("No se pudo inicializar el login de Google (revisa tu CLIENT_ID).", "error");
-      }
-    }
+  demoBtn?.addEventListener('click', () => {
+    // Pon un demo.pdf en /docs/img/demo.pdf
+    window.open("./img/demo.pdf", "_blank");
+  });
 
-    // Health-check del backend
-    async function checkHealth(){
-      const dot = $("#healthDot");
-      try{
-        const res = await fetch(BACKEND_URL + "/health", { method:"GET" });
-        healthOk = res.ok;
-        dot.classList.toggle("ok", res.ok);
-        dot.classList.toggle("bad", !res.ok);
-      }catch{
-        healthOk = false;
-        dot.classList.remove("ok"); dot.classList.add("bad");
-      }
-    }
-
-    // Abrir/cerrar modal
-    function openDlg(target){
-      $("#confirmTarget").textContent = target;
-      $("#dlgMsg").textContent = "";
-      $("#confirmDlg").showModal();
-    }
-    function closeDlg(){ $("#confirmDlg").close(); }
-
-    // Crear pedido en backend
-    async function createOrder(target){
-      const hdrs = {
-        "Content-Type":"application/json",
-        ...(idToken ? {"Authorization": "Bearer " + idToken} : {})
-      };
-      try{
-        const res = await fetch(BACKEND_URL + "/api/orders", {
-          method:"POST",
-          headers: hdrs,
-          body: JSON.stringify({ target })
-        });
-        const data = await res.json().catch(()=> ({}));
-        if(!res.ok){
-          throw new Error(data?.message || "Error creando el pedido.");
-        }
-        return data; // { orderId, status, next: "/panel/pedido/..." }
-      }catch(err){
-        throw err;
-      }
-    }
-
-    // Validación simple de target (rápida, flexible)
-    function sanitizeTarget(t){
-      return (t || "").trim().replace(/\s{2,}/g, " ");
-    }
-
-    // Flujo principal del botón "Búsqueda Premium"
-    async function onPremium(){
-      const raw = $("#targetInput").value;
-      const target = sanitizeTarget(raw);
-      if(!target){
-        msg("Escribe un target válido para continuar.", "error");
-        $("#targetInput").focus();
-        return;
-      }
-      if(!idToken){
-        msg("Primero inicia sesión con tu cuenta de Google.", "error");
-        // Forzamos prompt de Google si aún no se ha iniciado
-        if(window.google?.accounts?.id){ google.accounts.id.prompt(); }
-        return;
-      }
-      openDlg(target);
-      $("#confirmGo").onclick = async () => {
-        $("#confirmGo").disabled = true;
-        $("#dlgMsg").textContent = "Creando pedido…";
-        try{
-          const data = await createOrder(target);
-          $("#dlgMsg").textContent = "Pedido creado: " + (data?.orderId || "OK") + " • Estado: " + (data?.status || "pendiente");
-          msg("Pedido creado. Revisa tu panel para ver métodos de pago y estatus.", "ok");
-          setTimeout(()=> {
-            closeDlg();
-            if(data?.next){ location.href = data.next; }
-          }, 900);
-        }catch(err){
-          console.error(err);
-          $("#dlgMsg").textContent = "Error: " + err.message;
-          msg("No se pudo crear el pedido. Revisa el backend y tu sesión.", "error");
-        }finally{
-          $("#confirmGo").disabled = false;
-        }
-      };
-    }
-
-    // Eventos
-    window.addEventListener("DOMContentLoaded", () => {
-      // Renderiza botón de Google cuando el script cargue
-      const gsiReady = () => renderGSI();
-      if(document.readyState === "complete"){ gsiReady(); }
-      else { window.addEventListener("load", gsiReady, { once:true }); }
-
-      // Health check
-      checkHealth();
-      // cada 20s reintenta (opcional)
-      setInterval(checkHealth, 20000);
-
-      // Enter = premium
-      $("#targetInput").addEventListener("keydown", e => {
-        if(e.key === "Enter"){ onPremium(); }
-      });
-      $("#btnPremium").addEventListener("click", onPremium);
-    });
-  </script>
+  // Año dinámico
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
